@@ -1,15 +1,16 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { useNavigation } from '@react-navigation/native'
+import { orangeColor } from '../../statics/color'
 
 const Welcome = () => {
   const navigation = useNavigation()
   return (
-    <SafeAreaView style={{backgroundColor:'orange',flex:1,justifyContent:'space-between'}}>
-               <View style={{justifyContent:'space-between'}}>
-
-              
+    <SafeAreaView style={{backgroundColor:orangeColor,flex:1,justifyContent:'space-between'}}>
+      <StatusBar
+      hidden={true}/>
+               <View style={{justifyContent:'space-between'}}>              
               <View style={styles.textContainerSignin}>
           <Text style={styles.textHukuk}>Hukuk</Text>
           <Text style={styles.textChat}>Chat</Text>

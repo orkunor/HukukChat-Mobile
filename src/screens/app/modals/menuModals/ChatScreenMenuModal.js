@@ -18,7 +18,7 @@ const ChatScreenMenuModal = () => {
  const [menuData,setMenuData] = useState([
   {
     "id": "1",
-    "desc":"Hesap Ayarları",
+    "desc":"Hesap Bilgileri",
     "icon":"cog"
   },
   {

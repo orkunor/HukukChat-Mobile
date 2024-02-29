@@ -2,6 +2,7 @@ import { useNavigation } from "@react-navigation/native";
 import React, { useState } from "react";
 import { View, Text, Button, TextInput, StyleSheet, VirtualizedList ,SafeAreaView,TouchableOpacity, StatusBar} from "react-native";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
+import { orangeColor } from "../../statics/color";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -42,7 +43,7 @@ const Login = () => {
     
 
 
-      <SafeAreaView style={{backgroundColor:'orange',height:'100%'}}>
+      <SafeAreaView style={{backgroundColor:orangeColor,height:'100%'}}>
   <StatusBar
         hidden={true}
       />  
@@ -84,7 +85,7 @@ const Login = () => {
     textContainerSignin:{marginTop:75},
     textInputContainer:{marginTop:30,},
     button:{backgroundColor:'white',height:50,justifyContent:'center',alignItems:'center',width:300,marginTop:25,borderRadius:100},
-    buttonText:{color:'orange',fontWeight:'500',fontSize:18},
+    buttonText:{color:orangeColor,fontWeight:'600',fontSize:18},
     optionLoginContainer:{marginTop:80,},
     elementLogin:{borderWidth:2,borderRadius:50,height:50,width:300,justifyContent:'flex-start',alignItems:'center',flexDirection:'row',marginBottom:25,backgroundColor:'white',borderColor:'white'},
     container:{marginHorizontal:40},
