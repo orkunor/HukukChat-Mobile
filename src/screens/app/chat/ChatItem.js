@@ -3,7 +3,6 @@ import { View,SafeAreaView, Text, Image, TouchableOpacity, StyleSheet } from "re
 
 const ChatItem = ({item,index}) =>{
 
-    const aiId = 1
     
 
     return(

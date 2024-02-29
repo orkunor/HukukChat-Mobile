@@ -94,7 +94,7 @@ const Chat = ({navigation}) => {
           <TouchableOpacity style={{marginRight:5}} onPress={() => {
             dispatch(toggleChatScreenMenuVisible(true))
           }}>
-          <Ionicons name="menu-outline" size={30} color={"white"}></Ionicons>
+          <Ionicons name="grid-outline" size={25} color={"white"}></Ionicons>
 
           </TouchableOpacity>
 
