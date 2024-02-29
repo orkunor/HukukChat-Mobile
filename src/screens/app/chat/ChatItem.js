@@ -12,12 +12,13 @@ const ChatItem = ({item,index}) =>{
             (index % 2 === 0)
             ?
             <Image style={styles.imageai}
+            tintColor={'#D77A25'}
             source={require(`../../../icons/1.png`)}/>
             :
             <Image style={styles.imageai}
             source={require(`../../../icons/0.png`)}/>
         }
-    <Text style={{marginVertical:5,fontSize:16,marginRight:75}}>{item.title}</Text></View>        
+    <Text style={(index % 2 === 0) ? styles.aiText : styles.userText}>{item.title}</Text></View>        
         </TouchableOpacity>
     )                                                       
 }
@@ -29,19 +30,24 @@ const styles = StyleSheet.create({
 
     ai:{
     
-        backgroundColor:'#F7F7F8'
+        backgroundColor:'white'
 
     },
 
     user:{
-        backgroundColor:'white'
+        backgroundColor:'#D77A25'
 
 
 
     },
+    aiText:{},
+    userText:{
+        color:'white',
+        marginRight:75
+    },
     container:{
-    minHeight:75,marginTop:2,justifyContent:'flex-start',paddingTop:10,paddingBottom:10,flexDirection:'row',borderBottomWidth:2,borderColor:'orange',alignItems:'center',paddingRight:15},
-    imageai:{height:35,width:35,marginRight:25,marginLeft:25}
+    minHeight:75,marginTop:2,justifyContent:'flex-start',paddingTop:10,paddingBottom:10,flexDirection:'row',alignItems:'center',paddingRight:15},
+    imageai:{height:35,width:55,marginRight:15,marginLeft:25}
     
 
 

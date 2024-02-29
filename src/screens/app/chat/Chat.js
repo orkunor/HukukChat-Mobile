@@ -18,6 +18,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import ChatScreenMenuModal from "../modals/menuModals/ChatScreenMenuModal";
 import { useDispatch } from "react-redux";
 import { toggleChatScreenMenuVisible } from "../../../slices/modalSlices";
+import AccountSettingsModal from "../modals/AccountSettingsModal/AccountSettingsModal";
 
 const Chat = ({navigation}) => {
   const [req, setReq] = useState("");
@@ -94,7 +95,7 @@ const Chat = ({navigation}) => {
           <TouchableOpacity style={{marginRight:5}} onPress={() => {
             dispatch(toggleChatScreenMenuVisible(true))
           }}>
-          <Ionicons name="grid-outline" size={25} color={"white"}></Ionicons>
+          <Ionicons name="grid-outline" size={25} color={"#193353"}></Ionicons>
 
           </TouchableOpacity>
 
@@ -116,10 +117,10 @@ const Chat = ({navigation}) => {
               onChangeText={(req) =>setReq(req)}
               placeholder="Bir şeyler sorun..."
               ref={inputRef}
-              placeholderTextColor={'grey'}
+              placeholderTextColor={'#D77A25'}
             />
             <TouchableOpacity style={styles.sendButton} onPress={SendReq}>
-              <FontAwesome5 name="paper-plane" size={22} color="white" />
+              <FontAwesome5 name="paper-plane" size={22} color="#193353" />
             </TouchableOpacity>
           </View> 
         </View>
@@ -133,7 +134,7 @@ export default Chat;
 const styles = StyleSheet.create({
   bigContainer: {
     flex: 1,
-    backgroundColor:'orange'
+    backgroundColor:'white'
   },
   headTextContainer: {
     flexDirection: "row",
@@ -146,7 +147,7 @@ const styles = StyleSheet.create({
   headText: {
     fontSize: 25,
     fontWeight: "500",
-    color: "white",
+    color: "#D77A25",
     marginLeft:25
   },
   contentContainer: {
@@ -173,6 +174,6 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     paddingHorizontal: 10,
     marginRight: 10,
-    borderColor:'white',
+    borderColor:'#D77A25',
     backgroundColor:'white'
   }})

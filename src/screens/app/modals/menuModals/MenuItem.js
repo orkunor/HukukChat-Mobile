@@ -3,21 +3,29 @@ import React from 'react';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useDispatch} from 'react-redux';
-import {toggleAccountSettingsModal, toggleCardModal, toggleChatScreenMenuVisible, togglePaymentsModal, toggleVerificationModal, toggleWalletModal} from '../../../../slices/modalSlices';
+import { toggleAccountSettingsModalVisible, toggleCardModal, toggleChatScreenMenuVisible, toggleHelpModalVisible, toggleLicenceModalVisible, togglePaymentsModal, toggleSSSModalVisible, toggleVerificationModal, toggleWalletModal} from '../../../../slices/modalSlices';
 import { useNavigation } from '@react-navigation/native';
 const MenuItem = ({item}) => {
   const dispatch = useDispatch();
   const navigation = useNavigation()
   const handleItemPress = itemId => {
     switch (itemId) {
-  /*    case '1':
-          dispatch(toggleAccountSettingsModal(true))
+         case '1':
+          dispatch(toggleAccountSettingsModalVisible(true))
+         break;
+         case '2':
+          dispatch(toggleHelpModalVisible(true))
+         break;
+         case '3':
+          dispatch(toggleLicenceModalVisible(true))
+         break;
+         case '4':
+          dispatch(toggleSSSModalVisible(true))
+         break;
+        case '5':
+          dispatch(toggleChatScreenMenuVisible(false))
+          navigation.navigate('Welcome')
         break;
-        */
-      case '9':
-        dispatch(toggleChatScreenMenuVisible(false))
-        navigation.navigate('Welcome')
-      break;
       /*case '9':
         const removeData = async () => {
           try {

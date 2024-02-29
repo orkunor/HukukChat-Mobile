@@ -7,6 +7,10 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { FlatList } from 'react-native-gesture-handler';
 import MenuItem from './MenuItem';
+import AccountSettingsModal from '../AccountSettingsModal/AccountSettingsModal';
+import HelpModal from '../HelpModal/HelpModal';
+import LicenceModal from '../LicenceModal/LicenceModal';
+import SSSModal from '../SSSModal/SSSModal';
 
 const ChatScreenMenuModal = () => {
  const selectModalVisible = useSelector(selectIsChatScreenMenuModalVisible)
@@ -17,39 +21,23 @@ const ChatScreenMenuModal = () => {
     "desc":"Hesap Ayarları",
     "icon":"cog"
   },
- 
   {
-    "id": "3",
-    "desc":"Cüzdanım",
-    "icon":"wallet"
-  },
-  {
-    "id": "4",
-    "desc":"Ödemelerim",
-    "icon":"shopping-cart"
-  },
-  {
-    "id": "5",
+    "id": "2",
     "desc":"Yardım",
     "icon":"hands-helping"
   },
   {
-    "id": "6",
-    "desc":"Verilerin Korunması",
-    "icon":"database"
-  },
-  {
-    "id": "7",
+    "id": "3",
     "desc":"Lisanslar",
     "icon":"certificate"
   },
   {
-    "id": "8",
+    "id": "4",
     "desc":"Sıkça Sorulan Sorular",
     "icon":"question"
   },
   {
-    "id": "9",
+    "id": "5",
     "desc":"Çıkış Yap",
     "icon":"sign-out-alt"
   },
@@ -78,9 +66,13 @@ const ChatScreenMenuModal = () => {
   animationInTiming={500}
   animationOutTiming={500}
   backdropOpacity={1}
-  backdropColor='orange'
+  backdropColor='#D77A25'
 >
   <SafeAreaView style={{flex:1}}>
+    <AccountSettingsModal/>
+    <HelpModal/>
+    <LicenceModal/>
+    <SSSModal/>
   <View style={styles.topConatiner}>
     <TouchableOpacity
               style={{marginLeft: 15,}}
