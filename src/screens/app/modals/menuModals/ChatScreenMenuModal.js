@@ -11,6 +11,7 @@ import AccountSettingsModal from '../AccountSettingsModal/AccountSettingsModal';
 import HelpModal from '../HelpModal/HelpModal';
 import LicenceModal from '../LicenceModal/LicenceModal';
 import SSSModal from '../SSSModal/SSSModal';
+import KVKKModal from '../KVKKModal/KVKKModal';
 
 const ChatScreenMenuModal = () => {
  const selectModalVisible = useSelector(selectIsChatScreenMenuModalVisible)
@@ -27,17 +28,22 @@ const ChatScreenMenuModal = () => {
     "icon":"hands-helping"
   },
   {
-    "id": "3",
-    "desc":"Lisanslar",
-    "icon":"certificate"
-  },
-  {
     "id": "4",
     "desc":"Sıkça Sorulan Sorular",
     "icon":"question"
   },
   {
+    "id": "3",
+    "desc":"Çerez Politikası",
+    "icon":"certificate"
+  },
+  {
     "id": "5",
+    "desc":"KVKK",
+    "icon":"database"
+  },
+  {
+    "id": "6",
     "desc":"Çıkış Yap",
     "icon":"sign-out-alt"
   },
@@ -73,6 +79,7 @@ const ChatScreenMenuModal = () => {
     <HelpModal/>
     <LicenceModal/>
     <SSSModal/>
+    <KVKKModal/>
   <View style={styles.topConatiner}>
     <TouchableOpacity
               style={{marginLeft: 15,}}

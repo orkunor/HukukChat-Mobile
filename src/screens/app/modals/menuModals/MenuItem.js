@@ -3,7 +3,7 @@ import React from 'react';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useDispatch} from 'react-redux';
-import { toggleAccountSettingsModalVisible, toggleCardModal, toggleChatScreenMenuVisible, toggleHelpModalVisible, toggleLicenceModalVisible, togglePaymentsModal, toggleSSSModalVisible, toggleVerificationModal, toggleWalletModal} from '../../../../slices/modalSlices';
+import { toggleAccountSettingsModalVisible, toggleCardModal, toggleChatScreenMenuVisible, toggleHelpModalVisible, toggleKVKKModalVisible, toggleLicenceModalVisible, togglePaymentsModal, toggleSSSModalVisible, toggleVerificationModal, toggleWalletModal} from '../../../../slices/modalSlices';
 import { useNavigation } from '@react-navigation/native';
 const MenuItem = ({item}) => {
   const dispatch = useDispatch();
@@ -22,7 +22,10 @@ const MenuItem = ({item}) => {
          case '4':
           dispatch(toggleSSSModalVisible(true))
          break;
-        case '5':
+         case '5':
+          dispatch(toggleKVKKModalVisible(true))
+         break;
+        case '6':
           dispatch(toggleChatScreenMenuVisible(false))
           navigation.navigate('Welcome')
         break;

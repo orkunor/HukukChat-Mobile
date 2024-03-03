@@ -6,6 +6,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { selectIsAccountSettingsModalVisible, toggleAccountSettingsModalVisible } from '../../../../slices/modalSlices'
 import { blueColor, orangeColor } from '../../../../statics/color'
+import LinearGradient from 'react-native-linear-gradient';
 
 const AccountSettingsModal = () => {
                const selectModalVisible = useSelector(selectIsAccountSettingsModalVisible)
@@ -42,43 +43,46 @@ const AccountSettingsModal = () => {
           </View>
         </View>
         <View style={styles.containerBottom}>
-            <View style={{width:'100%',alignItems:'center',marginTop:10}}>
-              
-              <View style={{width:'90%',borderColor:blueColor,height:175,borderRadius:12,borderWidth:1,padding:10,alignItems:'center',justifyContent:'center'}}>
+        <LinearGradient colors={["red", "red", 'red']} style={{width:'100%',alignItems:'center',marginTop:10,borderRadius:12,padding:15}}>
+              <View style={{width:'90%',height:175,justifyContent:'center'}}>
                 <View style={{flexDirection:'row',alignItems:'center',}}>
-                <Text>Güncel Abonelik : </Text>
-                <Text style={{color:orangeColor,fontWeight:'600'}}>Premium</Text>
+                <Text style={{color:'white'}}>Güncel Abonelik : </Text>
+                <Text style={{color:"white",fontWeight:'600',fontSize:18}}>Premium</Text>
                 </View>
                 <View style={{flexDirection:'row',alignItems:'center',marginTop:15}}>
-                <Text>Abonelik Başlangıç : </Text>
+                <Text style={{color:'white'}}>Abonelik Başlangıç : </Text>
                 <Text style={{color:'black',fontWeight:'600'}}>17/05/2002</Text>
                 </View>
                 <View style={{flexDirection:'row',alignItems:'center',marginTop:15}}>
-                <Text>Abonelik Bitiş : </Text>
+                <Text style={{color:'white'}}>Abonelik Bitiş : </Text>
                 <Text style={{color:'black',fontWeight:'600'}}>19/02/2024</Text>
                 </View>
                 <View style={{flexDirection:'row',alignItems:'center',marginTop:15}}>
-                <Text>Kalan Kontür : </Text>
-                <Text style={{color:orangeColor,fontWeight:'600'}}>141</Text>
+                <Text style={{color:'white'}}>Kalan Kontür : </Text>
+                <Text style={{color:"white",fontWeight:'600',fontSize:16}}>141</Text>
                 </View>
               </View>
-            </View>
+              </LinearGradient>
 
 
           <View style={{marginTop:15}}>
           <Text style={{fontWeight:'600',fontSize:20}}>Profil Bilgileri</Text>
-          <View style={{flexDirection:'row',alignItems:'center',marginTop:15}}>
-                <Text>Kullanıcı Adı : </Text>
+          <LinearGradient colors={[orangeColor, orangeColor, orangeColor]} style={{width:'100%',marginTop:10,borderRadius:12,padding:15,height:175,justifyContent:'center'}}>
+          <View style={{flexDirection:'row',alignItems:'center'}}>
+                <Text style={{color:'white',fontSize:16}}>Kullanıcı Adı : </Text>
                 <Text style={{color:blueColor,fontWeight:'600',fontSize:15}}>kemalalibircan</Text>
                 </View>
                 <View style={{flexDirection:'row',alignItems:'center',marginTop:15}}>
-                <Text>Email : </Text>
+                <Text style={{color:'white',fontSize:16}}>Email : </Text>
                 <Text style={{color:blueColor,fontWeight:'600',fontSize:15}}>kemal.alibircan@gmail.com</Text>
                 </View>
                 <View style={{flexDirection:'row',alignItems:'center',marginTop:15}}>
-                <Text>Telefon Numarası : </Text>
+                <Text style={{color:'white',fontSize:16}}>Telefon Numarası : </Text>
                 <Text style={{color:blueColor,fontWeight:'600',fontSize:15}}>+90 534 612 46 42</Text>
                 </View>
+</LinearGradient>
+
+         
           </View>
 
 <View style={{width:'100%',justifyContent:'center',alignItems:'center',marginTop:20,borderTopWidth:.3,paddingTop:15}}>

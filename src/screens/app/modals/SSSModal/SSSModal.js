@@ -5,6 +5,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { selectIsAccountSettingsModalVisible, selectIsHelpModalVisible, selectIsSSSModalVisible, toggleAccountSettingsModalVisible, toggleHelpModalVisible, toggleSSSModalVisible } from '../../../../slices/modalSlices'
+import { blueColor, orangeColor } from '../../../../statics/color'
+import { ScrollView } from 'react-native-gesture-handler'
 
 const SSSModal = () => {
                const selectModalVisible = useSelector(selectIsSSSModalVisible)
@@ -40,6 +42,39 @@ const SSSModal = () => {
               <Text style={styles.headerName}>SSS</Text>
             </View>
           </View>
+        </View>
+        <View style={{flex:1,margin:0}}>
+          <ScrollView>
+
+         
+          <View style={{marginHorizontal:0,backgroundColor:'white',minHeight:150,marginTop:10,borderRadius:8,padding:10}}>
+          <View style={{backgroundColor:blueColor,minHeight:25,paddingLeft:10,borderRadius:7,justifyContent:'center'}}>
+          <Text style={{color:'white',fontWeight:'600'}}>Neden HukukChat?</Text>
+          </View>
+          <View style={{minHeight:25,paddingLeft:10,borderRadius:7,justifyContent:'center',marginTop:5,padding:10}}>
+          <Text style={{color:blueColor}}>EVOLVECHAT olarak, veri sahiplerinin kişisel verileri elektronik ve fiziki ortamlarda gerekli teknik ve idari güvenlik tedbirlerini alınarak saklanmaktadır. Kişisel veriler minimum süre ile saklanmaktadır.. EVEOLVECHAT ilgili mevzuatta kişisel verinin saklanması için bir süre öngörülüp öngörülmediğini tespit ettikten sonra mevzuatta belirtilen süre boyunca veriyi saklayacaktır; bir süre öngörülmemiş olması</Text>
+          </View>
+          </View>
+          <View style={{marginHorizontal:0,backgroundColor:'white',minHeight:150,marginTop:10,borderRadius:8,padding:10}}>
+          <View style={{backgroundColor:blueColor,minHeight:25,paddingLeft:10,borderRadius:7,justifyContent:'center'}}>
+          <Text style={{color:'white',fontWeight:'600'}}>Neden HukukChat?</Text>
+          </View>
+          <View style={{minHeight:25,paddingLeft:10,borderRadius:7,justifyContent:'center',marginTop:5,padding:10}}>
+          <Text style={{color:blueColor}}>EVOLVECHAT olarak, veri sahiplerinin kişisel verileri elektronik ve fiziki ortamlarda gerekli teknik ve idari güvenlik tedbirlerini alınarak saklanmaktadır. Kişisel veriler minimum süre ile saklanmaktadır.. EVEOLVECHAT ilgili mevzuatta kişisel verinin saklanması için bir süre öngörülüp öngörülmediğini tespit ettikten sonra mevzuatta belirtilen süre boyunca veriyi saklayacaktır; bir süre öngörülmemiş olması</Text>
+          </View>
+          </View>
+          <View style={{marginHorizontal:0,backgroundColor:'white',minHeight:150,marginTop:10,borderRadius:8,padding:10}}>
+          <View style={{backgroundColor:blueColor,minHeight:25,paddingLeft:10,borderRadius:7,justifyContent:'center'}}>
+          <Text style={{color:'white',fontWeight:'600'}}>Neden HukukChat?</Text>
+          </View>
+          <View style={{minHeight:25,paddingLeft:10,borderRadius:7,justifyContent:'center',marginTop:5,padding:10}}>
+          <Text style={{color:blueColor}}>EVOLVECHAT olarak, veri sahiplerinin kişisel verileri elektronik ve fiziki ortamlarda gerekli teknik ve idari güvenlik tedbirlerini alınarak saklanmaktadır. Kişisel veriler minimum süre ile saklanmaktadır.. EVEOLVECHAT ilgili mevzuatta kişisel verinin saklanması için bir süre öngörülüp öngörülmediğini tespit ettikten sonra mevzuatta belirtilen süre boyunca veriyi saklayacaktır; bir süre öngörülmemiş olması</Text>
+          </View>
+          </View>
+          </ScrollView>
+       
+          
+
         </View>
                </SafeAreaView>
                

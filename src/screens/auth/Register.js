@@ -1,82 +1,144 @@
-import { useNavigation } from "@react-navigation/native";
 import React, { useState } from "react";
-import { View, Text, Button, TextInput, StyleSheet, VirtualizedList ,SafeAreaView,TouchableOpacity} from "react-native";
-import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
+import { Image, View, Text, TextInput, StyleSheet, TouchableOpacity, SafeAreaView } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 import { orangeColor } from "../../statics/color";
 
 const Register = () => {
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [surname, setSurname] = useState("");
-const navigation = useNavigation()
+  const [email, setEmail] = useState("");
+  const navigation = useNavigation();
 
-const handleRegister = () => {
+  const handleRegister = () => {
+    navigation.navigate('Chat');
+  }
 
-navigation.navigate('Chat')
-
-
-}
   return (
-    
+    <SafeAreaView style={styles.container}>
+      <View style={styles.textContainerSignin}>
+        <Image
+          style={styles.logo}
+          source={require('../../icons/1.png')}
+        />
+      </View>
 
+      <View style={styles.textInputContainer}>
+        <TextInput
+          placeholder="Kullanıcı adı"
+          style={styles.input}
+          value={username}
+          onChangeText={setUsername}
+        />
+        <TextInput
+          placeholder="Şifre"
+          style={styles.input}
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry
+        />
+        <TextInput
+          placeholder="E-mail"
+          style={styles.input}
+          value={email}
+          onChangeText={setEmail}
+          keyboardType="email-address"
+        />
+      </View>
 
-      <SafeAreaView style={{backgroundColor:orangeColor,height:'100%',flex:1}}>
-        <View style={styles.container} >
-        <View style={styles.textContainerSignin}>
-          <Text style={styles.textHukuk}>Hukuk</Text>
-          <Text style={styles.textChat}>Chat</Text>
+      <TouchableOpacity
+        onPress={handleRegister}
+        style={styles.button}>
+        <Text style={styles.buttonText}>Kaydol</Text>
+      </TouchableOpacity>
 
+      <View style={styles.optionLoginContainer}>
+        <Text style={styles.optionText}>Hesabın var mı?</Text>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('Login')}>
+          <Text style={styles.optionLink}>Giriş yap.</Text>
+        </TouchableOpacity>
+      </View>
+
+      <View style={styles.privacyContainer}>
+        <View style={{flexDirection:'row'}}>
+        <Text style={styles.privacyText}>Devam ederek </Text>
+        <Text style={styles.privacyTextLaws}>Gizlilik Yasalarımızı </Text>
         </View>
-    
+        <Text style={styles.privacyText}>kabul etmiş olursun.</Text>
+      </View>
+    </SafeAreaView>
+  );
+}
+
+export default Register;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: orangeColor,
+  },
+  textContainerSignin: {
+    marginBottom: 30,
+  },
+  logo: {
+    height: 225,
+    width: 325,
+  },
+  textInputContainer: {
+    marginBottom: 20,
+  },
+  input: {
+    height: 50,
+    width: 300,
+    backgroundColor: 'white',
+    paddingLeft: 15,
+    borderRadius: 8,
+    marginBottom: 20,
+  },
+  button: {
+    backgroundColor: 'white',
+    height: 50,
+    width: 300,
+    borderRadius: 100,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 25,
+  },
+  buttonText: {
+    color: orangeColor,
+    fontWeight: '600',
+    fontSize: 18,
+  },
+  optionLoginContainer: {
+    flexDirection: 'row',
+    marginBottom: 20,
+
+  },
+  optionText: {
+    color: 'white',
+    marginRight: 5,
+  },
+  optionLink: {
+    fontWeight: '600',
+    color: 'white',
+  },
+  privacyContainer: {
+    justifyContent:'center',
+    alignItems:'center',
+    width:300,
+    height:50
+  },
+  privacyText: {
+    color: 'white',
+    fontWeight: '400',
+    fontSize: 16,
+  },
+  privacyTextLaws:{
+    color:'black',
+    fontWeight: '400',
+    fontSize: 16,
+  }
   
-        <View style={styles.textInputContainer}>
-        <TextInput placeholder="Kullanıcı adı" style={styles.username}></TextInput>
-        <TextInput placeholder="Şifre" style={styles.password}></TextInput>
-        <TextInput placeholder="E-mail" style={styles.password}></TextInput>
-        </View>   
-        
-        <View>
-        <TouchableOpacity 
-        onPress={() => {
-          handleRegister()
-        }}
-        style={styles.button}><Text style={styles.buttonText}>Kaydol</Text></TouchableOpacity>
-        <View style={{flexDirection:'row',marginTop:10,marginLeft:15}}>
-            <Text style={{color:'black'}}>Hesabın var mı? </Text>
-             <TouchableOpacity
-             onPress={() => {
-              navigation.navigate('Login')
-              
-             }}>
-              <Text style={{fontWeight:'600',color:'black'}}>Giriş yap.</Text></TouchableOpacity>
-             </View>
-        </View>
-        <View style={{justifyContent:'flex-end',alignItems:'center',marginTop:20,}}>
-          <Text style={{color:'white',marginTop:15,}}>Devam ederek <Text style={{color:'black',fontWeight:'400',fontSize:16}}>Gizlilik</Text> </Text>
-          <Text style={{color:'white'}}><Text style={{color:'black',fontWeight:'400',fontSize:16}}>Yasalarımızı </Text>kabul etmiş olursun.</Text>
-          </View>
-
-
-       
-    
-       
-        </View>
-       </SafeAreaView>
-    )
-    }
-    export default Register;
-    
-    const styles = StyleSheet.create({
-    container:{backgroundColor:'#454545'},
-    username:{height:50,width:300,backgroundColor:'white',paddingLeft:15,borderRadius:8},
-    password:{height:50,width:300,backgroundColor:'white',paddingLeft:15,borderRadius:8,marginTop:20},
-    textChat:{fontWeight:'700',fontSize:65,color:'white',marginLeft:100},
-    textHukuk:{fontWeight:'700',fontSize:65,color:'black'},
-    textContainerSignin:{marginTop:50},
-    textInputContainer:{marginTop:30,},
-    button:{backgroundColor:'white',height:50,justifyContent:'center',alignItems:'center',width:300,marginTop:25,borderRadius:100},
-    buttonText:{color:orangeColor,fontWeight:'600',fontSize:18},
-    optionLoginContainer:{marginTop:80,},
-    elementLogin:{borderWidth:2,borderRadius:50,height:50,width:300,justifyContent:'flex-start',alignItems:'center',flexDirection:'row',marginBottom:25,backgroundColor:'white',borderColor:'white'},
-    container:{marginHorizontal:40},
-    })
+});

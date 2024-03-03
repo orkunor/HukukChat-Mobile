@@ -4,12 +4,12 @@ import Modal from 'react-native-modal';
 import { useSelector, useDispatch } from 'react-redux';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { selectIsLicenceModalVisible, toggleLicenceModalVisible } from '../../../../slices/modalSlices';
+import { selectIsKVKKModalVisible, selectIsLicenceModalVisible, toggleKVKKModalVisible, toggleLicenceModalVisible } from '../../../../slices/modalSlices';
 import { WebView } from 'react-native-webview';
 import { orangeColor } from '../../../../statics/color';
 
-const LicenceModal = () => {
-  const selectModalVisible = useSelector(selectIsLicenceModalVisible);
+const KVKKModal = () => {
+  const selectModalVisible = useSelector(selectIsKVKKModalVisible);
   const dispatch = useDispatch();
 
   return (
@@ -28,7 +28,7 @@ const LicenceModal = () => {
       <SafeAreaView style={{ flex: 1 }}>
         <TouchableOpacity
           style={styles.closeButton}
-          onPress={() => dispatch(toggleLicenceModalVisible(false))}
+          onPress={() => dispatch(toggleKVKKModalVisible(false))}
         >
           <View style={styles.iconContainer}>
             <Ionicons
@@ -41,14 +41,14 @@ const LicenceModal = () => {
         <View style={{ flex: 1 }}>
           <WebView 
           
-          source={{ uri: 'https://www.hukukchat.com/cerez-politikasi' }} style={{ flex: 1 }} />
+          source={{ uri: 'https://www.hukukchat.com/kvkk' }} style={{ flex: 1 }} />
         </View>
       </SafeAreaView>
     </Modal>
   );
 };
 
-export default LicenceModal;
+export default KVKKModal;
 
 const styles = StyleSheet.create({
   closeButton: {
