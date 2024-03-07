@@ -6,7 +6,7 @@ const ChatItem = ({item,index}) =>{
     
 
     return(
-        <TouchableOpacity style={(index % 2 === 0) ? styles.ai : styles.user}>
+        <View style={(index % 2 === 0) ? styles.ai : styles.user}>
     <View style={styles.container}>
         {
             (index % 2 === 0)
@@ -19,7 +19,7 @@ const ChatItem = ({item,index}) =>{
             source={require(`../../../icons/0.png`)}/>
         }
     <Text style={(index % 2 === 0) ? styles.aiText : styles.userText}>{item.title}</Text></View>        
-        </TouchableOpacity>
+        </View>
     )                                                       
 }
 
@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
     },
     container:{
     minHeight:75,marginTop:2,justifyContent:'flex-start',paddingTop:10,paddingBottom:10,flexDirection:'row',alignItems:'center',paddingRight:15},
-    imageai:{height:35,width:50,marginRight:15,marginLeft:25}
+    imageai:{height:35,width:55,marginRight:15,marginLeft:25}
     
 
 

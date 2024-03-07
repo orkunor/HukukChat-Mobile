@@ -7,6 +7,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { selectIsAccountSettingsModalVisible, toggleAccountSettingsModalVisible } from '../../../../slices/modalSlices'
 import { blueColor, orangeColor } from '../../../../statics/color'
 import LinearGradient from 'react-native-linear-gradient';
+import { ScrollView } from 'react-native-gesture-handler'
 
 const AccountSettingsModal = () => {
                const selectModalVisible = useSelector(selectIsAccountSettingsModalVisible)
@@ -25,6 +26,9 @@ const AccountSettingsModal = () => {
                backdropColor='white'
              >
                <SafeAreaView style={{flex:1,margin:0}}>
+                <ScrollView>
+
+
                <View style={styles.containerTop}>
           <View style={styles.header}>
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
@@ -43,19 +47,19 @@ const AccountSettingsModal = () => {
           </View>
         </View>
         <View style={styles.containerBottom}>
-        <LinearGradient colors={["red", "red", 'red']} style={{width:'100%',alignItems:'center',marginTop:10,borderRadius:12,padding:15}}>
+        <LinearGradient colors={[blueColor,blueColor,blueColor]} style={{width:'100%',alignItems:'center',marginTop:10,borderRadius:12,padding:15}}>
               <View style={{width:'90%',height:175,justifyContent:'center'}}>
                 <View style={{flexDirection:'row',alignItems:'center',}}>
                 <Text style={{color:'white'}}>Güncel Abonelik : </Text>
-                <Text style={{color:"white",fontWeight:'600',fontSize:18}}>Premium</Text>
+                <Text style={{color:"#00FF00",fontWeight:'600',fontSize:18}}>Premium</Text>
                 </View>
                 <View style={{flexDirection:'row',alignItems:'center',marginTop:15}}>
                 <Text style={{color:'white'}}>Abonelik Başlangıç : </Text>
-                <Text style={{color:'black',fontWeight:'600'}}>17/05/2002</Text>
+                <Text style={{color:'white',fontWeight:'600'}}>17/05/2002</Text>
                 </View>
                 <View style={{flexDirection:'row',alignItems:'center',marginTop:15}}>
                 <Text style={{color:'white'}}>Abonelik Bitiş : </Text>
-                <Text style={{color:'black',fontWeight:'600'}}>19/02/2024</Text>
+                <Text style={{color:'white',fontWeight:'600'}}>19/02/2024</Text>
                 </View>
                 <View style={{flexDirection:'row',alignItems:'center',marginTop:15}}>
                 <Text style={{color:'white'}}>Kalan Kontür : </Text>
@@ -97,9 +101,10 @@ const AccountSettingsModal = () => {
 
 </View>
           
-       
+</ScrollView>
+
                </SafeAreaView>
-               
+
              </Modal>
   )
 }

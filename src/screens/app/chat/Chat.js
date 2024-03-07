@@ -19,11 +19,14 @@ import ChatScreenMenuModal from "../modals/menuModals/ChatScreenMenuModal";
 import { useDispatch } from "react-redux";
 import { toggleChatScreenMenuVisible } from "../../../slices/modalSlices";
 import AccountSettingsModal from "../modals/AccountSettingsModal/AccountSettingsModal";
+import { Flow } from 'react-native-animated-spinkit';
+import { blueColor, greyColor, orangeColor } from "../../../statics/color";
 
 const Chat = ({navigation}) => {
   const [req, setReq] = useState("");
   const inputRef = useRef(null);
   const dispatch = useDispatch()
+  const [messageWaiting,setMesssageWaiting] = useState(false)
   const [data, setData] = useState([
                {
                  "title": "Merhaba, nasılsın?",
@@ -73,7 +76,7 @@ const Chat = ({navigation}) => {
       console.error('Bir hata oluştu:', error);
     })
     .catch(e => console.log(e))
-
+    setMesssageWaiting(true)
     inputRef.current.clear(); // Clear the input value
     inputRef.current.blur();   
   }
@@ -119,9 +122,18 @@ const Chat = ({navigation}) => {
               ref={inputRef}
               placeholderTextColor={'#D77A25'}
             />
-            <TouchableOpacity style={styles.sendButton} onPress={SendReq}>
+            {
+              messageWaiting == true 
+              ?
+              <View style={{height:25,width:25,justifyContent:'center',alignItems:'center'}}>
+                                <Flow size={25}  color={blueColor} />
+                </View>
+              :
+              <TouchableOpacity style={styles.sendButton} onPress={SendReq}>
               <FontAwesome5 name="paper-plane" size={22} color="#193353" />
             </TouchableOpacity>
+            }
+           
           </View> 
         </View>
       </View>
@@ -176,4 +188,10 @@ const styles = StyleSheet.create({
     marginRight: 10,
     borderColor:'#D77A25',
     backgroundColor:'white'
-  }})
+  },
+  sendButton:{
+
+    height:25,width:25
+  }
+
+})
