@@ -1,22 +1,85 @@
 import { StyleSheet, Text, View,TouchableOpacity ,TextInput} from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Modal from 'react-native-modal'
 import { useDispatch, useSelector } from 'react-redux'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { selectIsAccountSettingsModalVisible, selectIsHelpModalVisible, toggleAccountSettingsModalVisible, toggleHelpModalVisible } from '../../../../slices/modalSlices'
+import { selectIsAccountSettingsModalVisible, selectIsHelpModalVisible, toggleAccountSettingsModalVisible, toggleHelpModalVisible, toggleNoteSendedVisible } from '../../../../slices/modalSlices'
 import { blueColor, orangeColor } from '../../../../statics/color'
+import { selectSignIn } from '../../../../slices/authSlices'
+import NoteSended from '../Warnings/NoteSended'
 
 const HelpModal = () => {
-               const selectModalVisible = useSelector(selectIsHelpModalVisible)
-               const dispatch = useDispatch()
-               const [note,setNote] = useState('')
-                
-               const handleNoteChange = newNote => {
-                setNote(newNote)
- }
+
+  const selectUserToken = useSelector(selectSignIn)
+  const [userData,setUserData] = useState()
+  const selectModalVisible = useSelector(selectIsHelpModalVisible)
+  const dispatch = useDispatch()
+  const [note,setNote] = useState('')
+
+  const handleNoteChange = newNote => {
+    setNote(newNote)
+  
+}
+
+  const fetchSubscriptionPlans = () => {
+    fetch('https://api.hukukchat.com/get_user_details/', {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        Authorization: `Bearer ${selectUserToken}`,
+      }
+    })
+    .then(response => {
+      if (response.ok) {
+        return response.json();
+      }
+      throw new Error('Network response was not ok.');
+    })
+    .then(data => {
+      // Burada data ile yapılmak istenen işlemleri gerçekleştirin
+      setUserData(data);
+      
+    })
+    .catch(error => {
+      console.error('There was a problem with your fetch operation:', error);
+    });
+   }
+
+   useEffect(() => {
+    fetchSubscriptionPlans();
+  }, []);
 
 
+
+  const handleFormSubmit = () => {
+    
+    try { 
+       fetch('https://api.hukukchat.com/handle-contact-form', {
+      method: 'POST',
+      headers: {
+        'accept': 'application/json',
+       'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        name:userData.user_name,
+        phone:"",
+        email:userData.email,
+        message:note
+
+      })
+    })
+    .then( response => response.json())
+    .then(data =>{
+      if(data.message == "Email sent successfully"){
+        dispatch(toggleNoteSendedVisible(true))
+      }
+      setNote('')
+    })
+    } catch (error) { 
+      console.log(error)
+    }
+  };
   return (
                <Modal
                style={{flex:1}}
@@ -30,7 +93,8 @@ const HelpModal = () => {
                backdropOpacity={1}
                backdropColor='white'
              >
-               <SafeAreaView style={{flex:1,margin:0}}>
+              <NoteSended/>
+               <SafeAreaView style={{flex:1,margin:0,backgroundColor:'white'}}>
                <View style={styles.containerTop}>
           <View style={styles.header}>
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
@@ -78,7 +142,16 @@ const HelpModal = () => {
                </TextInput>            
                </View>
              
-<TouchableOpacity style={{marginTop:25,backgroundColor:blueColor,width:300,justifyContent:'center',alignItems:'center',height:75,borderRadius:12,}}><Text style={{color:'white',fontSize:22}}>Gönder</Text></TouchableOpacity>
+               <TouchableOpacity
+  onPress={handleFormSubmit}
+  style={[
+    styles.submitButton,
+    { backgroundColor: note.length < 10 ? '#cccccc' : blueColor },
+  ]}
+  disabled={note.length < 10}
+>
+  <Text style={{ color: 'white', fontSize: 22 }}>Gönder</Text>
+</TouchableOpacity>
                </View>
                </SafeAreaView>
              </Modal>
@@ -159,4 +232,8 @@ const styles = StyleSheet.create({
                  justifyContent: 'center',
                  alignItems: 'center',
                },
+               submitButton:{
+
+                marginTop:25,backgroundColor:blueColor,width:300,justifyContent:'center',alignItems:'center',height:75,borderRadius:12
+               }
              });

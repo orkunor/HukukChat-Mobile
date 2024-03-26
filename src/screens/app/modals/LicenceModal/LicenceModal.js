@@ -39,11 +39,11 @@ const LicenceModal = () => {
 
   return (
     <Modal
-      style={{ flex: 1, margin: 0 }}
+      style={{ flex: 1, margin: 0,backgroundColor:orangeColor }}
       statusBarTranslucent={true}
       isVisible={isModalVisible}
       hasBackdrop={true}
-      animationIn={'slideInRight'}
+      animationIn={'slideInRight' }
       animationOut={'slideOutRight'}
       animationInTiming={500}
       animationOutTiming={500}

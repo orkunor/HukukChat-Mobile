@@ -52,23 +52,25 @@ const SSSModal = () => {
           <Text style={{color:'white',fontWeight:'600'}}>Neden HukukChat?</Text>
           </View>
           <View style={{minHeight:25,paddingLeft:10,borderRadius:7,justifyContent:'center',marginTop:5,padding:10}}>
-          <Text style={{color:blueColor}}>EVOLVECHAT olarak, veri sahiplerinin kişisel verileri elektronik ve fiziki ortamlarda gerekli teknik ve idari güvenlik tedbirlerini alınarak saklanmaktadır. Kişisel veriler minimum süre ile saklanmaktadır.. EVEOLVECHAT ilgili mevzuatta kişisel verinin saklanması için bir süre öngörülüp öngörülmediğini tespit ettikten sonra mevzuatta belirtilen süre boyunca veriyi saklayacaktır; bir süre öngörülmemiş olması</Text>
+          <Text style={{color:blueColor}}>Hukukta Yapay Zeka Çağı. HukukChat, GPT-3.5 ve GPT-4 Turbo teknolojileriyle hukuk alanına yenilik getiriyor. Derinlemesine anlama ve kapsamlı analiz yetenekleriyle, hukuki metin hazırlamada devrim yaratıyor.
+            </Text>
           </View>
           </View>
           <View style={{marginHorizontal:0,backgroundColor:'white',minHeight:150,marginTop:10,borderRadius:8,padding:10}}>
           <View style={{backgroundColor:blueColor,minHeight:25,paddingLeft:10,borderRadius:7,justifyContent:'center'}}>
-          <Text style={{color:'white',fontWeight:'600'}}>Neden HukukChat?</Text>
+          <Text style={{color:'white',fontWeight:'600'}}>HukukChat'ın Rakiplerinden Farkları?</Text>
           </View>
           <View style={{minHeight:25,paddingLeft:10,borderRadius:7,justifyContent:'center',marginTop:5,padding:10}}>
-          <Text style={{color:blueColor}}>EVOLVECHAT olarak, veri sahiplerinin kişisel verileri elektronik ve fiziki ortamlarda gerekli teknik ve idari güvenlik tedbirlerini alınarak saklanmaktadır. Kişisel veriler minimum süre ile saklanmaktadır.. EVEOLVECHAT ilgili mevzuatta kişisel verinin saklanması için bir süre öngörülüp öngörülmediğini tespit ettikten sonra mevzuatta belirtilen süre boyunca veriyi saklayacaktır; bir süre öngörülmemiş olması</Text>
+          <Text style={{color:blueColor}}>Teknolojik Üstünlük
+HukukChat, sadece bir uygulama değil, aynı zamanda sürekli evrilen, teknolojik olarak ileri seviye bir platformdur. En son yapay zeka teknolojilerini kullanan altyapımız, size her zaman bir adım önde olma avantajı sunar.</Text>
           </View>
           </View>
           <View style={{marginHorizontal:0,backgroundColor:'white',minHeight:150,marginTop:10,borderRadius:8,padding:10}}>
           <View style={{backgroundColor:blueColor,minHeight:25,paddingLeft:10,borderRadius:7,justifyContent:'center'}}>
-          <Text style={{color:'white',fontWeight:'600'}}>Neden HukukChat?</Text>
+          <Text style={{color:'white',fontWeight:'600'}}>Daha Detaylı Bilgilere Nereden Ulaşırım?</Text>
           </View>
           <View style={{minHeight:25,paddingLeft:10,borderRadius:7,justifyContent:'center',marginTop:5,padding:10}}>
-          <Text style={{color:blueColor}}>EVOLVECHAT olarak, veri sahiplerinin kişisel verileri elektronik ve fiziki ortamlarda gerekli teknik ve idari güvenlik tedbirlerini alınarak saklanmaktadır. Kişisel veriler minimum süre ile saklanmaktadır.. EVEOLVECHAT ilgili mevzuatta kişisel verinin saklanması için bir süre öngörülüp öngörülmediğini tespit ettikten sonra mevzuatta belirtilen süre boyunca veriyi saklayacaktır; bir süre öngörülmemiş olması</Text>
+          <Text style={{color:blueColor}}>https://www.hukukchat.com/ Web sayfası üzerinden bizimle ilgili daha detaylı sonuçlara ulaşabilirsiniz.</Text>
           </View>
           </View>
           </ScrollView>

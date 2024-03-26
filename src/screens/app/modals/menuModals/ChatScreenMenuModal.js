@@ -12,6 +12,7 @@ import HelpModal from '../HelpModal/HelpModal';
 import LicenceModal from '../LicenceModal/LicenceModal';
 import SSSModal from '../SSSModal/SSSModal';
 import KVKKModal from '../KVKKModal/KVKKModal';
+import { orangeColor } from '../../../../statics/color';
 
 const ChatScreenMenuModal = () => {
  const selectModalVisible = useSelector(selectIsChatScreenMenuModalVisible)
@@ -63,7 +64,7 @@ const ChatScreenMenuModal = () => {
  }
   return (
     <Modal
-  style={{flex:1}}
+  style={{flex:1,margin:0,bottom:0,backgroundColor:orangeColor}}
   statusBarTranslucent={true}
   isVisible={selectModalVisible}
   hasBackdrop={true}
@@ -71,10 +72,9 @@ const ChatScreenMenuModal = () => {
   animationOut={'slideOutRight'}
   animationInTiming={500}
   animationOutTiming={500}
-  backdropOpacity={1}
   backdropColor='#D77A25'
 >
-  <SafeAreaView style={{flex:1}}>
+  <SafeAreaView style={{flex:1,paddingTop:20,paddingHorizontal:15}}>
     <AccountSettingsModal/>
     <HelpModal/>
     <LicenceModal/>

@@ -2,85 +2,174 @@ import React, { useState } from "react";
 import { Image, View, Text, TextInput, StyleSheet, TouchableOpacity, SafeAreaView, StatusBar } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { orangeColor } from "../../statics/color";
+import { Formik } from 'formik';
+import * as Yup from 'yup';
+import WrongPassOrMailModal from "../app/modals/Warnings/WrongPassOrMailModal";
+import ServerErrorModal from "../app/modals/Warnings/ServerErrorModal";
+import { Flow } from 'react-native-animated-spinkit';
+import { useDispatch } from "react-redux";
+import { toggleServerErrorModalVisible, toggleWrongPassOrMailModalVisible } from "../../slices/modalSlices";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { setSignIn } from "../../slices/authSlices";
 
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [surname, setSurname] = useState("");
-  const navigation = useNavigation()
+  const navigation = useNavigation();
+  const [loading,setLoading] = useState(false)
+  const dispatch = useDispatch()
 
-  const login = () => {
-    /* fetch("http://localhost:3000/users", {
-       method: "POST",
-       headers: {
-         "Content-Type": "application/json"
-       },
-       body: JSON.stringify({
-         email,  
-         password,
-         surname
-       })
-     })
-       .then(response => {
-         // Sunucudan gelen yanıtı kontrol edin
-         if (!response.ok) {
-           throw new Error("Sunucu hatası: " + response.status);
-         }
-         return response.json();
-       })
-       .then(data => {
-         console.log(data);
-       })
-       .catch(error => {
-         console.error("Bir hata oluştu:", error);
-       });
-       */
-    navigation.navigate('Chat')
-  };
+  const loginValidationSchema = Yup.object().shape({
+    username: Yup.string().required('Kullanıcı adı gereklidir'),
+    password: Yup.string().min(6, 'Şifre en az 6 karakter olmalı').required('Şifre gereklidir'),
+  });
+
+  const storeData = async (value) => {
+    try {
+      await AsyncStorage.setItem('jwt', value);
+      dispatch(setSignIn(value))
+    } catch (e) {
+      console.log(value)
+    }
+  }
+  
+
+
+  const handleLogin = async (values) => {
+   setLoading(true);
+    try {
+      let formData = new FormData();
+    formData.append('username', values.username);
+    formData.append('password', values.password);
+    await fetch('https://api.hukukchat.com/login', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'multipart/form-data',
+        },
+        body: formData
+      }) .then(response => response.json())
+      .then(data =>{
+          if(data.message =="An error occurred: Incorrect username or password"){
+              dispatch(toggleWrongPassOrMailModalVisible(true))
+          }
+          else if (data.token_type == "bearer"){
+            storeData(data.access_token)
+          }
+          else{
+            dispatch(toggleServerErrorModalVisible(true))
+          }
+        
+
+
+      })
+
+    
+      // Handle successful response data
+  
+    } catch (error) {
+      console.error('Fetch Error:', error);
+      // Handle fetch error
+    } finally {
+      setLoading(false);
+    }
+    
+  }
+  
 
   return (
-    <SafeAreaView style={{ backgroundColor: orangeColor, height: '100%' }}>
+    <SafeAreaView style={{ backgroundColor: orangeColor, flex: 1 }}>
+      <WrongPassOrMailModal />
+      <ServerErrorModal />
       <StatusBar
         hidden={true}
       />
-      <View style={styles.container} >
-        <View style={styles.textContainerSignin}>
-          <View style={styles.imageContainer}>
-            <Image
-              style={styles.logo}
-              source={require('../../icons/1.png')}
-            />
-          </View>
-        </View>
+      <View style={styles.container}>
+        <Formik
+          initialValues={{ username: '', password: '' }} // Değişiklik burada: email yerine username
+          validationSchema={loginValidationSchema}
+          onSubmit={values => handleLogin(values)}
+        >
+          {({ handleChange, handleBlur, handleSubmit, values, errors, isValid }) => (
+            <>
+              <View style={styles.textContainerSignin}>
+                <View style={styles.imageContainer}>
+                  <Image
+                    style={styles.logo}
+                    source={require('../../icons/1.png')}
+                  />
+                </View>
+              </View>
 
-        <View style={styles.textInputContainer}>
-          <TextInput placeholder="Kullanıcı adı" style={styles.username}></TextInput>
-          <TextInput placeholder="Şifre" style={styles.password}></TextInput>
-        </View>
+              <View style={styles.textInputContainer}>
+                <View style={styles.containerInput}>
+                  <TextInput
+                    placeholder="Kullanıcı Adı" // Değişiklik burada: email yerine username
+                    style={styles.username}
+                    onChangeText={handleChange('username')} // Değişiklik burada: email yerine username
+                    onBlur={handleBlur('username')} // Değişiklik burada: email yerine username
+                    value={values.username} // Değişiklik burada: email yerine username
+                  />
+                  {errors.username && <Text style={styles.errorText}>{errors.username}</Text>}
+                </View>
 
-        <View>
-          <TouchableOpacity onPress={login} style={styles.button}><Text style={styles.buttonText}>Devam et</Text></TouchableOpacity>
-          <View style={{ flexDirection: 'row', marginTop: 10, marginLeft: 15 }}>
-            <Text style={{ color: 'black' }}>Hesabın yok mu? </Text>
-            <TouchableOpacity onPress={() => { navigation.navigate('Register') }}><Text style={{ fontWeight: '600', color: 'black' }}>Hemen oluştur.</Text></TouchableOpacity>
-          </View>
-        </View>
+                <View style={styles.containerInput}>
+                  <TextInput
+                    placeholder="Şifre"
+                    style={styles.password}
+                    onChangeText={handleChange('password')}
+                    onBlur={handleBlur('password')}
+                    value={values.password}
+                    secureTextEntry
+                  />
+                  {errors.password && <Text style={styles.errorText}>{errors.password}</Text>}
+                </View>
+              </View>
+
+              <TouchableOpacity
+                onPress={handleSubmit} // Değişiklik burada: handleSubmit çağrısı
+                style={styles.button}
+                disabled={!isValid}
+              >
+
+            {loading ? (
+                <Flow color={orangeColor} size={30} />
+              ) : (
+                <Text style={styles.buttonText}>Devam Et</Text>
+              )}  
+              </TouchableOpacity>
+
+              <View style={{ flexDirection: 'row', marginTop: 10, marginLeft: 15 }}>
+                <Text style={{ color: 'black' }}>Hesabın yok mu? </Text>
+                <TouchableOpacity onPress={() => { navigation.navigate('Register') }}>
+                  <Text style={{ fontWeight: '600', color: 'black' }}>Hemen oluştur.</Text>
+                </TouchableOpacity>
+              </View>
+            </>
+          )}
+        </Formik>
       </View>
     </SafeAreaView>
   )
 }
 export default Login;
 
+
 const styles = StyleSheet.create({
-  container: { backgroundColor: '#454545', flex: 1 },
-  username: { height: 50, width: 300, backgroundColor: 'white', paddingLeft: 15, borderRadius: 8 },
-  password: { height: 50, width: 300, backgroundColor: 'white', paddingLeft: 15, borderRadius: 8, marginTop: 20 },
+  container: { backgroundColor: orangeColor, flex: 1, marginHorizontal: 40 },
+  username: { height: 50, width: 300, backgroundColor: 'white', paddingLeft: 15, borderRadius: 8,  },
+  password: { height: 50, width: 300, backgroundColor: 'white', paddingLeft: 15, borderRadius: 8 },
   textContainerSignin: { marginTop: 50 },
   textInputContainer: { marginTop: 30 },
-  button: { backgroundColor: 'white', height: 50, justifyContent: 'center', alignItems: 'center', width: 300, marginTop: 25, borderRadius: 100 },
+  button: { backgroundColor: 'white', height: 50, justifyContent: 'center', alignItems: 'center', width: 300, borderRadius: 100 ,marginTop:25},
   buttonText: { color: orangeColor, fontWeight: '600', fontSize: 18 },
-  elementLogin: { borderWidth: 2, borderRadius: 50, height: 50, width: 300, justifyContent: 'flex-start', alignItems: 'center', flexDirection: 'row', marginBottom: 25, backgroundColor: 'white', borderColor: 'white' },
-  container: { marginHorizontal: 40 },
-  imageContainer: { alignItems: 'center', justifyContent: 'center' }, // Güncellendi
+  imageContainer: { alignItems: 'center', justifyContent: 'center' },
   logo: { height: 225, width: 325 },
+  errorText: {
+    color: 'white',
+    fontSize: 12,
+    marginLeft:5
+  },
+  containerInput:{
+    height:65,
+    marginBottom:10
+  }
 });

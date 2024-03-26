@@ -51,7 +51,7 @@ const KVKKModal = () => {
       backdropOpacity={1}
       backdropColor="#D77A25"
     >
-      <SafeAreaView style={{ flex: 1 }}>
+      <SafeAreaView style={{ flex: 1,backgroundColor:orangeColor }}>
         <CustomWebView
         
           uri="https://www.hukukchat.com/kvkk"

@@ -3,8 +3,10 @@ import React from 'react';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useDispatch} from 'react-redux';
+
 import { toggleAccountSettingsModalVisible, toggleCardModal, toggleChatScreenMenuVisible, toggleHelpModalVisible, toggleKVKKModalVisible, toggleLicenceModalVisible, togglePaymentsModal, toggleSSSModalVisible, toggleVerificationModal, toggleWalletModal} from '../../../../slices/modalSlices';
 import { useNavigation } from '@react-navigation/native';
+import { setSignIn } from '../../../../slices/authSlices';
 const MenuItem = ({item}) => {
   const dispatch = useDispatch();
   const navigation = useNavigation()
@@ -27,7 +29,17 @@ const MenuItem = ({item}) => {
          break;
         case '6':
           dispatch(toggleChatScreenMenuVisible(false))
-          navigation.navigate('Welcome')
+          const removeData = async () => {
+            try {
+              await AsyncStorage.removeItem('jwt');
+              dispatch(setSignIn(null));
+              console.log('silindi');
+            } catch (error) {
+              console.error('Veri silme hatası:', error);
+            }
+          };
+          
+          removeData();
         break;
       /*case '9':
         const removeData = async () => {

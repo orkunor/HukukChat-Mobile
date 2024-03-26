@@ -11,24 +11,13 @@ const Stack = createStackNavigator();
 
 function AppStackNavigation() {
   return (
-    <Stack.Navigator initialRouteName="Welcome">
-      <Stack.Screen
-        name="Login"
-        component={Login}
-        options={{headerShown: false}}></Stack.Screen>
-         <Stack.Screen
-        name="Welcome"
-        component={Welcome}
-        options={{headerShown: false}}></Stack.Screen>
-      <Stack.Screen
-        name="Register"
-        component={Register}
-        options={{headerShown: false}}></Stack.Screen>
+    <Stack.Navigator initialRouteName="Chat">
       <Stack.Screen
         name="Chat"
         component={Chat}
         options={{headerShown: false}}></Stack.Screen>
-        
+       
+      
     </Stack.Navigator>
     
   );
