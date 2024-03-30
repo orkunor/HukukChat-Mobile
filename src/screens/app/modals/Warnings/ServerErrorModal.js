@@ -14,7 +14,6 @@ const ServerErrorModal = () => {
   return (
                <Modal
                style={{flex:1}}
-               statusBarTranslucent={true}
                isVisible={selectModalVisible}
                hasBackdrop={true}
                animationIn={'slideInDown'}
@@ -27,7 +26,7 @@ const ServerErrorModal = () => {
                <SafeAreaView style={{flex:1,margin:0,justifyContent:'center',alignItems:'center'}}>
           
                 <View style={{justifyContent:'center',alignItems:'center',width:'95%',height:225,backgroundColor:'white',borderRadius:12}}>
-                  <Text style={{color:'black',textAlign:'center',fontSize:22}}>UPPSS! Sunucu hatası lütfen tekrar deneyiniz!</Text>
+                  <Text style={{color:'black',textAlign:'center',fontSize:22}}>UPPSS! Sunucu hatası, lütfen internet bağlantınızı kontrol edip tekrar deneyiniz!</Text>
                   <TouchableOpacity 
                   onPress={() => {
                     dispatch(toggleServerErrorModalVisible(false))

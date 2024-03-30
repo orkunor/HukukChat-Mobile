@@ -11,15 +11,17 @@ import { useDispatch } from "react-redux";
 import { toggleServerErrorModalVisible, toggleWrongPassOrMailModalVisible } from "../../slices/modalSlices";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { setSignIn } from "../../slices/authSlices";
+import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 
-const Login = () => {
+const EnterCode = () => {
   const navigation = useNavigation();
   const [loading,setLoading] = useState(false)
   const dispatch = useDispatch()
 
   const loginValidationSchema = Yup.object().shape({
-    username: Yup.string().required('Kullanıcı adı gereklidir'),
-    password: Yup.string().min(6, 'Şifre en az 6 karakter olmalı').required('Şifre gereklidir'),
+
+               email: Yup.string().email('Geçerli bir email adresi girin').required('Email gereklidir'),
+
   });
 
   const storeData = async (value) => {
@@ -90,47 +92,30 @@ const Login = () => {
           {({ handleChange, handleBlur, handleSubmit, values, errors, isValid }) => (
             <>
               <View style={styles.textContainerSignin}>
+               <TouchableOpacity onPress={()=> {navigation.navigate('ResetPassword')}}>
+                              <FontAwesome5 name='arrow-left' size={35} color='white'></FontAwesome5>
+               </TouchableOpacity>
                 <View style={styles.imageContainer}>
-                  <Image
-                    style={styles.logo}
-                    source={require('../../icons/1.png')}
-                  />
+                  <Text style={{color:'white',fontSize:25}}>Şifremi Unuttum</Text>
                 </View>
               </View>
 
               <View style={styles.textInputContainer}>
                 <View style={styles.containerInput}>
                   <TextInput
-                    placeholder="Kullanıcı Adı" // Değişiklik burada: email yerine username
+                    placeholder="Örnek: 013-343" 
                     style={styles.username}
-                    onChangeText={handleChange('username')} // Değişiklik burada: email yerine username
-                    onBlur={handleBlur('username')} // Değişiklik burada: email yerine username
-                    value={values.username} // Değişiklik burada: email yerine username
+                    onChangeText={handleChange('email')} 
+                    onBlur={handleBlur('email')} 
+                    value={values.email} 
                   />
-                  {errors.username && <Text style={styles.errorText}>{errors.username}</Text>}
+                  {errors.email && <Text style={styles.errorText}>{errors.email}</Text>}
                 </View>
 
-                <View style={styles.containerInput}>
-                  <TextInput
-                    placeholder="Şifre"
-                    style={styles.password}
-                    onChangeText={handleChange('password')}
-                    onBlur={handleBlur('password')}
-                    value={values.password}
-                    secureTextEntry
-                  />
-                  {errors.password && <Text style={styles.errorText}>{errors.password}</Text>}
-                  <TouchableOpacity onPress={()=> {
-                      navigation.navigate('ResetPassword')
-  
-                  }} style={{marginLeft:5,marginTop:2}}>
-                  <Text>Şifremi Unuttum</Text>
-                  </TouchableOpacity>
-                </View>
               </View>
 
               <TouchableOpacity
-                onPress={handleSubmit} // Değişiklik burada: handleSubmit çağrısı
+                onPress={handleSubmit} 
                 style={styles.button}
                 disabled={!isValid}
               >
@@ -142,12 +127,7 @@ const Login = () => {
               )}  
               </TouchableOpacity>
 
-              <View style={{ flexDirection: 'row', marginTop: 10, marginLeft: 15 }}>
-                <Text style={{ color: 'black' }}>Hesabın yok mu? </Text>
-                <TouchableOpacity onPress={() => { navigation.navigate('Register') }}>
-                  <Text style={{ fontWeight: '600', color: 'black' }}>Hemen oluştur.</Text>
-                </TouchableOpacity>
-              </View>
+         
             </>
           )}
         </Formik>
@@ -155,7 +135,7 @@ const Login = () => {
     </SafeAreaView>
   )
 }
-export default Login;
+export default EnterCode;
 
 
 const styles = StyleSheet.create({
@@ -166,7 +146,6 @@ const styles = StyleSheet.create({
   textInputContainer: { marginTop: 30 },
   button: { backgroundColor: 'white', height: 50, justifyContent: 'center', alignItems: 'center', width: 300, borderRadius: 100 ,marginTop:25},
   buttonText: { color: orangeColor, fontWeight: '600', fontSize: 18 },
-  imageContainer: { alignItems: 'center', justifyContent: 'center' },
   logo: { height: 225, width: 325 },
   errorText: {
     color: 'white',
@@ -177,5 +156,8 @@ const styles = StyleSheet.create({
     height:65,
     marginBottom:10
   },
+  imageContainer:{
+               marginTop:20
+  }
   
 });

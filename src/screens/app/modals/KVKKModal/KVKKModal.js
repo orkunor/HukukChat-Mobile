@@ -41,7 +41,6 @@ const KVKKModal = () => {
   return (
     <Modal
       style={{ flex: 1, margin: 0 }}
-      statusBarTranslucent={true}
       isVisible={isModalVisible}
       hasBackdrop={true}
       animationIn={'slideInRight'}

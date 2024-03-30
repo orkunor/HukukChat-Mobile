@@ -59,7 +59,7 @@ const AccountSettingsModal = () => {
 
   return (
                <Modal
-               style={{flex:1}}
+               style={{flex:1,backgroundColor:'white'}}
                statusBarTranslucent={true}
                isVisible={selectModalVisible}
                hasBackdrop={true}

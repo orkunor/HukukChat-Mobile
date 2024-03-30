@@ -14,7 +14,6 @@ const SSSModal = () => {
   return (
                <Modal
                style={{flex:1}}
-               statusBarTranslucent={true}
                isVisible={selectModalVisible}
                hasBackdrop={true}
                animationIn={'slideInRight'}

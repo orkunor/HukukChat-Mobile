@@ -7,12 +7,16 @@ import ServerErrorModal from "../app/modals/Warnings/ServerErrorModal";
 import * as Yup from 'yup';
 import { Flow } from 'react-native-animated-spinkit';
 import { useDispatch } from "react-redux";
-import { toggleMailAlreadyInUse, toggleServerErrorModalVisible } from "../../slices/modalSlices";
+import { toggleKVKKModalVisible, toggleMailAlreadyInUse, toggleServerErrorModalVisible, toggleUserCreated, toggleUserNameAlreadyInUseVisible } from "../../slices/modalSlices";
 import MailAlreadyInUse from "../app/modals/Warnings/MailAlreadyInUse";
+import UserNameAlreadyInUse from "../app/modals/Warnings/UserNameAlreadyInUse";
+import UserCreated from "../app/modals/Warnings/UserCreated";
+import KVKKModal from "../app/modals/KVKKModal/KVKKModal";
 
 const Register = () => {
   const navigation = useNavigation();
   const [loading,setLoading] = useState(false)
+  const dispatch = useDispatch()
   const registerValidationSchema = Yup.object().shape({
     username: Yup.string().required('Kullanıcı adı gereklidir'),
     email: Yup.string().email('Geçerli bir email adresi girin').required('Email gereklidir'),
@@ -20,12 +24,10 @@ const Register = () => {
   });
 
   const handleRegister = (values) => {
-    navigation.navigate('Chat');
+    
 
     // values içinde form alanlarının değerlerine erişebilirsiniz
-   console.log(values);
     setLoading(true);
-    const dispatch = useDispatch()
     
 
     // API'ye post isteği göndermek için fetch kullanıyoruz
@@ -44,20 +46,34 @@ const Register = () => {
     })
       .then(response => response.json())
       .then(data => {
-        setLoading(false);
-        navigation.navigate('Chat'); // Kayıt başarılıysa Chat ekranına yönlendir
-
         // API yanıtını işleme alabilirsiniz, örneğin kullanıcıyı yönlendirebilirsiniz
         if (data.msg === "Kullanıcı başarıyla oluşturuldu, aktivasyon için lütfen e-postanızı kontrol edin!") {
          console.log(data.msg)
+         setLoading(false);
+        dispatch(toggleUserCreated(true))
         } 
-        else{
-          console.log(data)
+        else if(data.message === "An error occurred: Bu e-posta adresi zaten kullanılıyor"){
+          setLoading(false);
+         dispatch(toggleMailAlreadyInUse(true))
         }
+        
+        else if(data.message === "An error occurred: Bu kullanıcı adı zaten alınmış"){
+          dispatch(toggleUserNameAlreadyInUseVisible(true))
+          setLoading(false);
+        }else{
+          dispatch(toggleServerErrorModalVisible(true))
+          setLoading(false);
+
+        }
+        
         // API'den dönen veriyi konsola yazdır
       })
       .catch(error => {
         console.error('Error:', error);
+        dispatch(toggleServerErrorModalVisible(true))
+        setLoading(false);
+
+
         // Hata durumunda kullanıcıya bir hata mesajı gösterebilirsiniz
       }); 
 
@@ -71,9 +87,15 @@ const Register = () => {
     <SafeAreaView style={styles.container}>
     <ServerErrorModal />
     <MailAlreadyInUse/>
+    <UserNameAlreadyInUse/>
+    <KVKKModal/>
+    <UserCreated/>
     <Formik
       initialValues={{ username: '', password: '', email: '' }}
-      onSubmit={values => handleRegister(values)}
+      onSubmit={(values, { resetForm }) => {
+        handleRegister(values);
+        resetForm(); // Input değerlerini sıfırlar
+      }}
       validationSchema={registerValidationSchema}
     >
       {({ handleChange, handleBlur, handleSubmit, values, errors, isValid }) => (
@@ -147,7 +169,15 @@ const Register = () => {
           <View style={styles.privacyContainer}>
             <View style={{ flexDirection: 'row' }}>
               <Text style={styles.privacyText}>Devam ederek </Text>
+              <TouchableOpacity
+              onPress={()=> {
+                dispatch(toggleKVKKModalVisible(true))
+              }}
+              >
+
               <Text style={styles.privacyTextLaws}>Gizlilik Yasalarımızı </Text>
+              </TouchableOpacity>
+
             </View>
             <Text style={styles.privacyText}>kabul etmiş olursun.</Text>
           </View>

@@ -9,7 +9,6 @@ const Welcome = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar hidden={true} />
       <View style={styles.content}>
         <View style={styles.textContainerSignin}>
           <Image

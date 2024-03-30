@@ -13,35 +13,36 @@ const ChatItem = ({ item, index }) => {
     if (item.title.slice(-4) === "null") {
         // Eğer dizenin son 4 karakteri "null" ise gosterme fonksiyonunu çağır
         return (
-            <View style={(index % 2 === 0) ? styles.ai : styles.user}>
+            <View style={(item.owner == "Ai") ? styles.ai : styles.user}>
                 <View style={styles.container}>
                     {
-                        (index % 2 === 0)
+                        (item.owner == "Ai")
                             ?
                             <Image style={styles.imageai}
-                                source={require(`../../../icons/0.png`)} />
+
+                                source={require(`../../../icons/1.png`)} />
                             :
                             <Image style={styles.imageai}
-                                source={require(`../../../icons/1.png`)} />
+                                source={require(`../../../icons/0.png`)} />
                     }
-                    <Text style={(index % 2 === 0) ? styles.aiText : styles.userText}>{gosterme(item.title)}</Text>
+                    <Text style={(item.owner == "Ai") ? styles.aiText : styles.userText}>{gosterme(item.title)}</Text>
                 </View>
             </View>
         );
     } else {
         return (
-            <View style={(index % 2 === 0) ? styles.ai : styles.user}>
+            <View style={(item.owner == "Ai") ? styles.ai : styles.user}>
                 <View style={styles.container}>
                     {
-                        (index % 2 === 0)
+                        (item.owner == "Ai")
                             ?
                             <Image style={styles.imageai}
-                                source={require(`../../../icons/0.png`)} />
+                                source={require(`../../../icons/1.png`)} />
                             :
                             <Image style={styles.imageai}
-                                source={require(`../../../icons/1.png`)} />
+                                source={require(`../../../icons/0.png`)} />
                     }
-                    <Text style={(index % 2 === 0) ? styles.aiText : styles.userText}>{item.title}</Text>
+                    <Text style={(item.owner == "Ai") ? styles.aiText : styles.userText}>{item.title}</Text>
                 </View>
             </View>
         );
@@ -52,14 +53,16 @@ export default ChatItem;
 
 const styles = StyleSheet.create({
     ai: {
-        backgroundColor: 'white'
+        backgroundColor: '#D77A25'
+
     },
     user: {
-        backgroundColor: '#D77A25'
+        backgroundColor: 'white'
+
     },
-    aiText: {},
+    aiText: { marginRight: 75,        color: 'white',
+},
     userText: {
-        color: 'white',
         marginRight: 75
     },
     container: {

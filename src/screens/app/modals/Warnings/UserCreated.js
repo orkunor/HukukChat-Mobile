@@ -4,12 +4,12 @@ import Modal from 'react-native-modal'
 import { useDispatch, useSelector } from 'react-redux'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { selectIsAccountSettingsModalVisible, selectIsHelpModalVisible, selectIsSSSModalVisible, selectIsWrongPassOrMailModalVisible, toggleAccountSettingsModalVisible, toggleHelpModalVisible, toggleSSSModalVisible, toggleWrongPassOrMailModalVisible } from '../../../../slices/modalSlices'
+import { selectIsAccountSettingsModalVisible, selectIsHelpModalVisible, selectIsSSSModalVisible, selectIsWrongPassOrMailModalVisible, selectUserCreatedVisible, toggleAccountSettingsModalVisible, toggleHelpModalVisible, toggleSSSModalVisible, toggleUserCreated, toggleWrongPassOrMailModalVisible } from '../../../../slices/modalSlices'
 import { blueColor, orangeColor } from '../../../../statics/color'
 import { ScrollView } from 'react-native-gesture-handler'
 
-const WrongPassOrMailModal = () => {
-               const selectModalVisible = useSelector(selectIsWrongPassOrMailModalVisible)
+const UserCreated = () => {
+               const selectModalVisible = useSelector(selectUserCreatedVisible)
                const dispatch = useDispatch()
   return (
                <Modal
@@ -26,13 +26,14 @@ const WrongPassOrMailModal = () => {
                <SafeAreaView style={{flex:1,margin:0,justifyContent:'center',alignItems:'center'}}>
           
                 <View style={{justifyContent:'center',alignItems:'center',width:'95%',height:225,backgroundColor:'white',borderRadius:12}}>
-                  <Text style={{color:'black',textAlign:'center',fontSize:22}}>Parole veya kullanıcı adınız hatalıdır!</Text>
+                  <Text style={{color:'black',textAlign:'center',fontSize:22}}>Kullanıcı başarıyla oluşturuldu, aktivasyon için lütfen e-postanızı kontrol edin!</Text>
                   <TouchableOpacity 
                   onPress={() => {
-                    dispatch(toggleWrongPassOrMailModalVisible(false))
+
+                    dispatch(toggleUserCreated(false))
 
                   }}
-                  style={{backgroundColor:blueColor,justifyContent:'center',alignItems:'center',padding:15,borderRadius:8,marginTop:20}}><Text style={{color:'white',textAlign:'center',fontSize:18}}>Tekrar Dene</Text></TouchableOpacity>
+                  style={{backgroundColor:blueColor,justifyContent:'center',alignItems:'center',padding:15,borderRadius:8,marginTop:20}}><Text style={{color:'white',textAlign:'center',fontSize:18}}>Tamamla</Text></TouchableOpacity>
                 </View>
        
                </SafeAreaView>
@@ -41,7 +42,7 @@ const WrongPassOrMailModal = () => {
   )
 }
 
-export default WrongPassOrMailModal
+export default UserCreated
 
 const styles = StyleSheet.create({
                

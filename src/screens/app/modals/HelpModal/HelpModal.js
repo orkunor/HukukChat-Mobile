@@ -4,10 +4,12 @@ import Modal from 'react-native-modal'
 import { useDispatch, useSelector } from 'react-redux'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { selectIsAccountSettingsModalVisible, selectIsHelpModalVisible, toggleAccountSettingsModalVisible, toggleHelpModalVisible, toggleNoteSendedVisible } from '../../../../slices/modalSlices'
+import { selectIsAccountSettingsModalVisible, selectIsHelpModalVisible, toggleAccountSettingsModalVisible, toggleHelpModalVisible, toggleNoteSendedVisible, toggleServerErrorModalVisible } from '../../../../slices/modalSlices'
 import { blueColor, orangeColor } from '../../../../statics/color'
 import { selectSignIn } from '../../../../slices/authSlices'
 import NoteSended from '../Warnings/NoteSended'
+import { Flow } from 'react-native-animated-spinkit';
+import ServerErrorModal from '../Warnings/ServerErrorModal'
 
 const HelpModal = () => {
 
@@ -16,6 +18,7 @@ const HelpModal = () => {
   const selectModalVisible = useSelector(selectIsHelpModalVisible)
   const dispatch = useDispatch()
   const [note,setNote] = useState('')
+  const [loading,setLoading] = useState(false)
 
   const handleNoteChange = newNote => {
     setNote(newNote)
@@ -55,6 +58,7 @@ const HelpModal = () => {
   const handleFormSubmit = () => {
     
     try { 
+      setLoading(true)
        fetch('https://api.hukukchat.com/handle-contact-form', {
       method: 'POST',
       headers: {
@@ -71,19 +75,19 @@ const HelpModal = () => {
     })
     .then( response => response.json())
     .then(data =>{
+      setLoading(false)
       if(data.message == "Email sent successfully"){
         dispatch(toggleNoteSendedVisible(true))
       }
       setNote('')
     })
     } catch (error) { 
-      console.log(error)
+     dispatch(toggleServerErrorModalVisible(true))
     }
   };
   return (
                <Modal
-               style={{flex:1}}
-               statusBarTranslucent={true}
+               style={{flex:1,margin:0,backgroundColor:'white'}}
                isVisible={selectModalVisible}
                hasBackdrop={true}
                animationIn={'slideInRight'}
@@ -94,6 +98,7 @@ const HelpModal = () => {
                backdropColor='white'
              >
               <NoteSended/>
+              <ServerErrorModal/>
                <SafeAreaView style={{flex:1,margin:0,backgroundColor:'white'}}>
                <View style={styles.containerTop}>
           <View style={styles.header}>
@@ -150,7 +155,12 @@ const HelpModal = () => {
   ]}
   disabled={note.length < 10}
 >
-  <Text style={{ color: 'white', fontSize: 22 }}>Gönder</Text>
+{loading ? (
+                <Flow color={orangeColor} size={30} />
+              ) : (
+                <Text style={{color:'white',fontSize:24}}>Gönder</Text>
+              )}  
+  
 </TouchableOpacity>
                </View>
                </SafeAreaView>
@@ -172,7 +182,7 @@ const styles = StyleSheet.create({
                  justifyContent: 'center',
                  alignItems: 'center',
                },
-               containerTop: {height: 50, alignItems: 'center', width: '100%'},
+               containerTop: {height: 50, alignItems: 'center', width: '100%',marginTop:5,paddingLeft:10},
                header: {
                  justifyContent: 'space-between',
                  alignItems: 'center',

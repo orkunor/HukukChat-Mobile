@@ -5,6 +5,8 @@ import Register from '../screens/auth/Register';
 import Chat from '../screens/app/chat/Chat';
 import 'react-native-gesture-handler';
 import Welcome from '../screens/auth/Welcome';
+import ResetPassword from '../screens/auth/ResetPassword';
+import EnterCode from '../screens/auth/EnterCode';
 
 
 const Stack = createStackNavigator();
@@ -23,6 +25,14 @@ function AuthStackNavigation() {
       <Stack.Screen
         name="Register"
         component={Register}
+        options={{headerShown: false}}></Stack.Screen>
+         <Stack.Screen
+        name="ResetPassword"
+        component={ResetPassword}
+        options={{headerShown: false}}></Stack.Screen>
+          <Stack.Screen
+        name="EnterCode"
+        component={EnterCode}
         options={{headerShown: false}}></Stack.Screen>
     </Stack.Navigator>
     

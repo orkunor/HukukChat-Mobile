@@ -10,7 +10,9 @@ const initialState = {
   isWrongPassOrMailModalVisible: false,
   isServerErrorModalVisible: false,
   isMailAlreadyInUseVisible:false,
-  isNoteSendedVisible:false
+  isNoteSendedVisible:false,
+  isUserCreatedVisible:false,
+  isUserNameAlreadyInUseVisible:false
 };
 export const modalSlice = createSlice({
   name: 'modals',
@@ -47,6 +49,12 @@ export const modalSlice = createSlice({
     toggleNoteSendedVisible: (state, action) => {
       state.isNoteSendedVisible = action.payload;
     },
+    toggleUserNameAlreadyInUseVisible: (state, action) => {
+      state.isUserNameAlreadyInUseVisible = action.payload;
+    },
+    toggleUserCreated: (state, action) => {
+      state.isUserCreatedVisible = action.payload;
+    },
   },
 });
 
@@ -60,7 +68,9 @@ export const {
   toggleLicenceModalVisible,
   toggleSSSModalVisible,
   toggleMailAlreadyInUse,
-  toggleNoteSendedVisible
+  toggleNoteSendedVisible,
+  toggleUserCreated,
+  toggleUserNameAlreadyInUseVisible
 } = modalSlice.actions;
 
 export const selectIsChatScreenMenuModalVisible = state =>
@@ -82,4 +92,8 @@ export const selectIsServerErrorModalVisible = state =>
   state.modals.isMailAlreadyInUseVisible;
   export const selectIsNoteSendedVisible = state =>
   state.modals.isNoteSendedVisible;
+  export const selectIsUserNameAlreadyInUseVisible = state =>
+  state.modals.isUserNameAlreadyInUseVisible;
+  export const selectUserCreatedVisible = state =>
+  state.modals.isUserCreatedVisible;
 export default modalSlice.reducer;

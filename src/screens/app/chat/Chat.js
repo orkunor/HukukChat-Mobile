@@ -21,11 +21,12 @@ import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import ChatScreenMenuModal from "../modals/menuModals/ChatScreenMenuModal";
 import { useDispatch, useSelector } from "react-redux";
-import { toggleChatScreenMenuVisible } from "../../../slices/modalSlices";
+import { toggleChatScreenMenuVisible, toggleServerErrorModalVisible } from "../../../slices/modalSlices";
 import AccountSettingsModal from "../modals/AccountSettingsModal/AccountSettingsModal";
 import { Flow } from 'react-native-animated-spinkit';
 import { blueColor, greyColor, orangeColor } from "../../../statics/color";
 import { selectSignIn } from "../../../slices/authSlices";
+import ServerErrorModal from "../modals/Warnings/ServerErrorModal";
 
 const Chat = ({ navigation }) => {
   const [req, setReq] = useState("");
@@ -34,6 +35,10 @@ const Chat = ({ navigation }) => {
   const [messageWaiting, setMessageWaiting] = useState(false)
   const selectUserToken = useSelector(selectSignIn)
   const [data, setData] = useState([
+    {
+      title:"Merhabalar ben Hukuk Chat size nasıl yardımcı olabilirim?null",
+      owner:"Ai"
+    }
      ]);
 
   
@@ -56,21 +61,34 @@ const handleResetChatHistory = () => {
 .then(data =>{
   if (data.status === 'success') {
     console.log('Session reset successfully');
-    setData([])
+    setData([
+      {      title:"Hukukla ilgili neyi merak ediyorsanız bana sormaktan çekinmeyin.null",
+               owner:"Ai"
+              
+    }
+    ])
   }else{
-    console.log(data)
-    setData([])
+    setData([
+      {      title:"Hukukla ilgili neyi merak ediyorsanız bana sormaktan çekinmeyin.null",
+      owner:"Ai"
+    }
+    ])
 
   }
 
 })
-.catch(error => console.error('Hata:', error));
+.catch(error => 
+  {
+    dispatch(toggleServerErrorModalVisible(true))
+    console.error('Hata:', error)
+  });
   
 }
 
   const send = () => {
     setMessageWaiting(true)
-    const myrequest = {title: req}
+    const myrequest = {title: req,
+              owner:"me"}
     setData(prevData => [...prevData, myrequest]);
     setReq('')
 
@@ -92,7 +110,8 @@ const handleResetChatHistory = () => {
         const chunk = JSON.parse(event.data);
         console.log(chunk)
         accumulatedData += chunk.text
-        const newChatItem = { title: accumulatedData }; 
+        const newChatItem = { title: accumulatedData,
+          owner:"Ai" }; 
         
         if(chunk.text == null){
           setData(prevData => [...prevData, newChatItem]);
@@ -112,7 +131,7 @@ const handleResetChatHistory = () => {
       } catch (error) {
         console.error("Error parsing JSON data:", error);
         setMessageWaiting(false)
-
+        dispatch(toggleServerErrorModalVisible(true))
       }
 
     });
@@ -121,11 +140,12 @@ const handleResetChatHistory = () => {
       if (event.type === "error") {
         console.error("Connection error:", event.message);
         setMessageWaiting(false)
+        dispatch(toggleServerErrorModalVisible(true))
+
 
       } else if (event.type === "exception") {
         console.error("Error:", event.message, event.error);
         setMessageWaiting(false)
-
       }
     });
   
@@ -142,7 +162,7 @@ const handleResetChatHistory = () => {
   return (
     <SafeAreaView style={{ flex: 1, margin: 0 }}>
       <ChatScreenMenuModal />
-      <StatusBar hidden={true} />
+      <ServerErrorModal/>
       <View style={styles.bigContainer}>
         <View style={styles.headTextContainer}>
           <Text style={styles.headText}>HukukChat</Text>
