@@ -99,7 +99,6 @@ const EnterCode = () => {
                   <Text style={{color:'white',fontSize:25}}>Şifremi Unuttum</Text>
                 </View>
               </View>
-
               <View style={styles.textInputContainer}>
                 <View style={styles.containerInput}>
                   <TextInput

@@ -27,7 +27,6 @@ const AccountSettingsModal = () => {
                        
             
              
-             
                const fetchSubscriptionPlans = () => {
                 fetch('https://api.hukukchat.com/get_user_details/', {
                   method: 'GET',
@@ -47,6 +46,7 @@ const AccountSettingsModal = () => {
                 .then(data => {
                   // Burada data ile yapılmak istenen işlemleri gerçekleştirin
                   setUserData(data);
+
                 })
                 .catch(error => {
                   console.error('There was a problem with your fetch operation:', error);

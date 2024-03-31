@@ -21,12 +21,14 @@ import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import ChatScreenMenuModal from "../modals/menuModals/ChatScreenMenuModal";
 import { useDispatch, useSelector } from "react-redux";
-import { toggleChatScreenMenuVisible, toggleServerErrorModalVisible } from "../../../slices/modalSlices";
+import { toggleChatScreenMenuVisible, toggleServerErrorModalVisible, toggleWarningFuncVisible } from "../../../slices/modalSlices";
 import AccountSettingsModal from "../modals/AccountSettingsModal/AccountSettingsModal";
 import { Flow } from 'react-native-animated-spinkit';
 import { blueColor, greyColor, orangeColor } from "../../../statics/color";
 import { selectSignIn } from "../../../slices/authSlices";
 import ServerErrorModal from "../modals/Warnings/ServerErrorModal";
+import { selectUserName } from "../../../slices/userSlices";
+import WarningFunc from "../modals/Warnings/WarningFunc";
 
 const Chat = ({ navigation }) => {
   const [req, setReq] = useState("");
@@ -34,6 +36,9 @@ const Chat = ({ navigation }) => {
   const dispatch = useDispatch()
   const [messageWaiting, setMessageWaiting] = useState(false)
   const selectUserToken = useSelector(selectSignIn)
+  const[message,setMessage] = useState("")
+  const [buttonText,setButtonText] = useState("")
+  const [userData,setUserData] = useState()
   const [data, setData] = useState([
     {
       title:"Merhabalar ben Hukuk Chat size nasıl yardımcı olabilirim?null",
@@ -41,46 +46,83 @@ const Chat = ({ navigation }) => {
     }
      ]);
 
-  
+  const selectUserId = useSelector(selectUserName)
 
 
 
 let accumulatedData = ''; // Accumulate chunks into a single string
 
+const fetchSubscriptionPlans = () => {
+  fetch('https://api.hukukchat.com/get_user_details/', {
+    method: 'GET',
+    headers: {
+      Accept: 'application/json',
+      Authorization: `Bearer ${selectUserToken}`,
+
+      // Buraya gerekirse diğer header bilgilerini ekleyebilirsiniz
+    }
+  })
+  .then(response => {
+    if (response.ok) {
+      return response.json();
+    }
+    throw new Error('Network response was not ok.');
+  })
+  .then(data => {
+    // Burada data ile yapılmak istenen işlemleri gerçekleştirin
+    setUserData(data);
+
+  })
+  .catch(error => {
+    console.error('There was a problem with your fetch operation:', error);
+  });
+ }
+
+ useEffect(() => {
+  fetchSubscriptionPlans();
+}, []);
 
 const handleResetChatHistory = () => {
 
-  fetch('https://api.hukukchat.com/reset_session', {
-  method: 'POST',
-  headers: {
-    Accept: 'application/json',
-    Authorization: `Bearer ${selectUserToken}`,
-  },
-})
-.then(response => response.json())
-.then(data =>{
-  if (data.status === 'success') {
-    console.log('Session reset successfully');
-    setData([
-      {      title:"Hukukla ilgili neyi merak ediyorsanız bana sormaktan çekinmeyin.null",
-               owner:"Ai"
-              
-    }
-    ])
-  }else{
-    setData([
-      {      title:"Hukukla ilgili neyi merak ediyorsanız bana sormaktan çekinmeyin.null",
-      owner:"Ai"
-    }
-    ])
+  fetch('https://api.hukukchat.com/reset_session/', {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
 
-  }
-
-})
-.catch(error => 
-  {
+    },
+    body: JSON.stringify({
+      user_id:userData.user_name
+    }) 
+  })
+  .then(response => response.json())
+  .then(data => {
+    if(data.status === "success"){
+dispatch(toggleWarningFuncVisible(true))
+setMessage("Geçmişiniz sıfırlandı yeni sorular sorabilirsiniz.")
+setButtonText("Tamamla")
+setData([{
+  title:"Merhabalar ben Hukuk Chat size nasıl yardımcı olabilirim?null",
+  owner:"Ai"
+}])
+    }
+    else{
+      dispatch(toggleServerErrorModalVisible(true))
+      setData([{
+        title:"Merhabalar ben Hukuk Chat size nasıl yardımcı olabilirim?null",
+        owner:"Ai"
+      }])
+    }
+    
+  })
+  .catch(error => {
+    console.error('Hata:', error); 
     dispatch(toggleServerErrorModalVisible(true))
-    console.error('Hata:', error)
+    setData([{
+      title:"Merhabalar ben Hukuk Chat size nasıl yardımcı olabilirim?null",
+      owner:"Ai"
+    }])
+
   });
   
 }
@@ -163,6 +205,7 @@ const handleResetChatHistory = () => {
     <SafeAreaView style={{ flex: 1, margin: 0 }}>
       <ChatScreenMenuModal />
       <ServerErrorModal/>
+      <WarningFunc message={message} button={buttonText}/>
       <View style={styles.bigContainer}>
         <View style={styles.headTextContainer}>
           <Text style={styles.headText}>HukukChat</Text>

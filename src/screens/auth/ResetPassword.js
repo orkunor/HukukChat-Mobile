@@ -8,21 +8,25 @@ import WrongPassOrMailModal from "../app/modals/Warnings/WrongPassOrMailModal";
 import ServerErrorModal from "../app/modals/Warnings/ServerErrorModal";
 import { Flow } from 'react-native-animated-spinkit';
 import { useDispatch } from "react-redux";
-import { toggleServerErrorModalVisible, toggleWrongPassOrMailModalVisible } from "../../slices/modalSlices";
+import { toggleServerErrorModalVisible, toggleWarningFuncVisible, toggleWrongPassOrMailModalVisible } from "../../slices/modalSlices";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { setSignIn } from "../../slices/authSlices";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
+import WarningFunc from "../app/modals/Warnings/WarningFunc";
+
 
 const ResetPassword = () => {
   const navigation = useNavigation();
   const [loading,setLoading] = useState(false)
   const dispatch = useDispatch()
-
+  const [message,setMessage] = useState("")
+  const [buttonText,setButtonText] = useState("")
   const loginValidationSchema = Yup.object().shape({
 
                email: Yup.string().email('Geçerli bir email adresi girin').required('Email gereklidir'),
 
   });
+  
 
   const storeData = async (value) => {
     try {
@@ -34,67 +38,74 @@ const ResetPassword = () => {
   }
   
 
-
-  const handleLogin = async (values) => {
+  const handleLogin = (values) => {
    setLoading(true);
-   navigation.navigate('EnterCode')
-   /* try {
+
+
       let formData = new FormData();
-    formData.append('username', values.username);
-    formData.append('password', values.password);
-    await fetch('https://api.hukukchat.com/login', {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'multipart/form-data',
-        },
-        body: formData
-      }) .then(response => response.json())
-      .then(data =>{
-          if(data.message =="An error occurred: Incorrect username or password"){
-              dispatch(toggleWrongPassOrMailModalVisible(true))
-          }
-          else if (data.token_type == "bearer"){
-            storeData(data.access_token)
-          }
-          else{
-            dispatch(toggleServerErrorModalVisible(true))
-          }
-        
-      })
+    formData.append("email",values.email);
+    fetch('https://api.hukukchat.com/password_reset_request/', {
+  method: 'POST',
+  headers: {
+    'Accept': 'application/json',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    email:values.email
+  })
+})
+.then(response => response.json())
+.then(data => {
+  if(data.message =="An error occurred: Kullanıcı bulunamadı"){
+    setMessage("Böyle bir kullanıcı bulunamadı!")
+    setLoading(false)
+    setButtonText("Tekrar Dene")
+    dispatch(toggleWarningFuncVisible(true))
+  }
+  else if(data.msg == "Şifre sıfırlama bağlantısı gönderildi!"){
+    setMessage("Şifre sıfırlama bağlantısı mail adresinize gönderilmiştir!")
+    setLoading(false)
+    setButtonText("Tamamla")
+    dispatch(toggleWarningFuncVisible(true))
 
+  }
+  else{
+    dispatch(toggleServerErrorModalVisible(true))
+    setLoading(false)
+  }
+  setLoading(false)
+})
+.catch(error => {
+  console.error('Hata:', error);
+  dispatch(toggleServerErrorModalVisible(true))
+  setLoading(false)
+
+});
       
-
     
-      // Handle successful response data
-  
-    } catch (error) {
-      console.error('Fetch Error:', error);
-      dispatch(toggleServerErrorModalVisible(true))
-      // Handle fetch error
-    } finally {
-      setLoading(false);
-    }*/
     
   }
   
 
   return (
     <SafeAreaView style={{ backgroundColor: orangeColor, flex: 1 }}>
-      <WrongPassOrMailModal />
       <ServerErrorModal />
+      <WarningFunc message={message} button={buttonText}/>
      
       <View style={styles.container}>
         <Formik
-          initialValues={{ username: '', password: '' }} // Değişiklik burada: email yerine username
+          initialValues={{email:''}} // Değişiklik burada: email yerine username
           validationSchema={loginValidationSchema}
           onSubmit={values => handleLogin(values)}
         >
           {({ handleChange, handleBlur, handleSubmit, values, errors, isValid }) => (
             <>
               <View style={styles.textContainerSignin}>
-               <TouchableOpacity onPress={()=> {navigation.navigate('Login')}}>
+               <TouchableOpacity
+               style={{flexDirection:'row',alignItems:'center'}}
+                onPress={()=> {navigation.navigate('Login')}}>
                               <FontAwesome5 name='arrow-left' size={35} color='white'></FontAwesome5>
+                              <Text style={{color:'white',fontSize:25,marginLeft:10,fontWeight:'600'}}>Giriş Yap</Text>
                </TouchableOpacity>
                 <View style={styles.imageContainer}>
                   <Text style={{color:'white',fontSize:25}}>Şifremi Unuttum</Text>
@@ -158,7 +169,7 @@ const styles = StyleSheet.create({
     marginBottom:10
   },
   imageContainer:{
-               marginTop:20
+               marginTop:35
   }
   
 });

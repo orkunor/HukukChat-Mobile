@@ -8,8 +8,8 @@ import { selectIsAccountSettingsModalVisible, selectIsHelpModalVisible, selectIs
 import { blueColor, orangeColor } from '../../../../statics/color'
 import { ScrollView } from 'react-native-gesture-handler'
 
-const WrongPassOrMailModal = () => {
-               const selectModalVisible = useSelector(selectIsWrongPassOrMailModalVisible)
+const WarningFunc = ({message,button}) => {
+               const selectModalVisible = useSelector(selectIsWarningFuncVisible)
                const dispatch = useDispatch()
   return (
                <Modal
@@ -26,13 +26,13 @@ const WrongPassOrMailModal = () => {
                <SafeAreaView style={{flex:1,margin:0,justifyContent:'center',alignItems:'center'}}>
           
                 <View style={{justifyContent:'center',alignItems:'center',width:'95%',height:225,backgroundColor:'white',borderRadius:12}}>
-                  <Text style={{color:'black',textAlign:'center',fontSize:22}}>Parole veya kullanıcı adınız hatalıdır!</Text>
+                  <Text style={{color:'black',textAlign:'center',fontSize:22}}>{message}</Text>
                   <TouchableOpacity 
                   onPress={() => {
-                    dispatch(toggleWrongPassOrMailModalVisible(false))
+                    dispatch(toggleWarningFuncVisible(false))
 
                   }}
-                  style={{backgroundColor:blueColor,justifyContent:'center',alignItems:'center',padding:15,borderRadius:8,marginTop:20}}><Text style={{color:'white',textAlign:'center',fontSize:18}}>Tekrar Dene</Text></TouchableOpacity>
+                  style={{backgroundColor:blueColor,justifyContent:'center',alignItems:'center',padding:15,borderRadius:8,marginTop:20}}><Text style={{color:'white',textAlign:'center',fontSize:18}}>{button}</Text></TouchableOpacity>
                 </View>
        
                </SafeAreaView>
@@ -41,7 +41,7 @@ const WrongPassOrMailModal = () => {
   )
 }
 
-export default WrongPassOrMailModal
+export default WarningFunc
 
 const styles = StyleSheet.create({
                
