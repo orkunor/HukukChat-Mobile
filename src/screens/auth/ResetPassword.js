@@ -72,6 +72,7 @@ const ResetPassword = () => {
   else{
     dispatch(toggleServerErrorModalVisible(true))
     setLoading(false)
+    
   }
   setLoading(false)
 })

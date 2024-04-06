@@ -10,6 +10,8 @@ import { blueColor, orangeColor } from '../../../../statics/color'
 import LinearGradient from 'react-native-linear-gradient';
 import { ScrollView } from 'react-native-gesture-handler'
 import { selectSignIn } from '../../../../slices/authSlices';
+import { BackHandler } from 'react-native';
+
 
 const AccountSettingsModal = () => {
                const selectModalVisible = useSelector(selectIsAccountSettingsModalVisible)
@@ -25,8 +27,21 @@ const AccountSettingsModal = () => {
                 return formattedDate;
             }
                        
-            
-             
+            useEffect(() => {
+              const backAction = () => {
+                dispatch(toggleAccountSettingsModalVisible(false))
+                return true
+                ;
+              };
+          
+              const backHandler = BackHandler.addEventListener(
+                'hardwareBackPress',
+                backAction,
+              );
+      
+              return () => backHandler.remove();
+            }, []);
+
                const fetchSubscriptionPlans = () => {
                 fetch('https://api.hukukchat.com/get_user_details/', {
                   method: 'GET',
@@ -59,7 +74,7 @@ const AccountSettingsModal = () => {
 
   return (
                <Modal
-               style={{flex:1,backgroundColor:'white'}}
+               style={{flex:1,backgroundColor:'white',margin:0}}
                statusBarTranslucent={true}
                isVisible={selectModalVisible}
                hasBackdrop={true}
@@ -67,10 +82,13 @@ const AccountSettingsModal = () => {
                animationOut={'slideOutRight'}
                animationInTiming={500}
                animationOutTiming={500}
+               onRequestClose={() => {
+                dispatch(toggleAccountSettingsModalVisible(false))
+             }}
                backdropOpacity={1}
                backdropColor='white'
              >
-               <SafeAreaView style={{flex:1,margin:0,backgroundColor:'white'}}>
+               <SafeAreaView style={{flex:1,margin:0,backgroundColor:'white',alignItems:'center'}}>
                 <ScrollView>
 
 
@@ -92,7 +110,7 @@ const AccountSettingsModal = () => {
           </View>
         </View>
         <View style={styles.containerBottom}>
-        <LinearGradient colors={[blueColor,blueColor,blueColor]} style={{width:'100%',alignItems:'center',marginTop:10,borderRadius:12,padding:15}}>
+        <LinearGradient colors={[blueColor,blueColor,blueColor]} style={{width:'100%',alignItems:'center',marginTop:10,borderRadius:12,padding:15,}}>
               <View style={{width:'90%',height:175,justifyContent:'center'}}>
                 <View style={{flexDirection:'row',alignItems:'center',}}>
                 <Text style={{color:'white'}}>Güncel Abonelik : </Text>
@@ -154,7 +172,7 @@ const styles = StyleSheet.create({
                  justifyContent: 'center',
                  alignItems: 'center',
                },
-               containerTop: {height: 50, alignItems: 'center', width: '100%'},
+               containerTop: {height: 50, alignItems: 'center', width: '100%',marginTop:50},
                header: {
                  justifyContent: 'space-between',
                  alignItems: 'center',
@@ -167,7 +185,8 @@ const styles = StyleSheet.create({
                headerName: {fontWeight: '600', fontSize: 22, marginLeft: 5,color:orangeColor},
         
            containerBottom:{
-            flex:1
+            flex:1,
+            width:350
 
            },
              });

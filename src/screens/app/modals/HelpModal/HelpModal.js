@@ -10,6 +10,8 @@ import { selectSignIn } from '../../../../slices/authSlices'
 import NoteSended from '../Warnings/NoteSended'
 import { Flow } from 'react-native-animated-spinkit';
 import ServerErrorModal from '../Warnings/ServerErrorModal'
+import { BackHandler } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler'
 
 const HelpModal = () => {
 
@@ -24,6 +26,20 @@ const HelpModal = () => {
     setNote(newNote)
   
 }
+useEffect(() => {
+  const backAction = () => {
+    dispatch(toggleHelpModalVisible(false))
+    return true
+    ;
+  };
+
+  const backHandler = BackHandler.addEventListener(
+    'hardwareBackPress',
+    backAction,
+  );
+
+  return () => backHandler.remove();
+}, []);
 
   const fetchSubscriptionPlans = () => {
     fetch('https://api.hukukchat.com/get_user_details/', {
@@ -82,6 +98,8 @@ const HelpModal = () => {
       setNote('')
     })
     } catch (error) { 
+
+
      dispatch(toggleServerErrorModalVisible(true))
     }
   };
@@ -95,11 +113,16 @@ const HelpModal = () => {
                animationInTiming={500}
                animationOutTiming={500}
                backdropOpacity={1}
+               onRequestClose={() => {
+                dispatch(toggleHelpModalVisible(false))
+             }}
                backdropColor='white'
              >
               <NoteSended/>
               <ServerErrorModal/>
                <SafeAreaView style={{flex:1,margin:0,backgroundColor:'white'}}>
+                <ScrollView>
+
                <View style={styles.containerTop}>
           <View style={styles.header}>
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
@@ -131,6 +154,7 @@ const HelpModal = () => {
                <View style={{width:350,height:350,borderWidth:.3,borderColor:blueColor,borderRadius:20,padding:25}}>
                <TextInput
                value={note}
+               placeholderTextColor={'grey'}
                onChangeText={handleNoteChange}
                 style={{
                               color: 'black',
@@ -163,6 +187,8 @@ const HelpModal = () => {
   
 </TouchableOpacity>
                </View>
+               </ScrollView>
+
                </SafeAreaView>
              </Modal>
   )
@@ -182,7 +208,7 @@ const styles = StyleSheet.create({
                  justifyContent: 'center',
                  alignItems: 'center',
                },
-               containerTop: {height: 50, alignItems: 'center', width: '100%',marginTop:5,paddingLeft:10},
+               containerTop: {height: 50, alignItems: 'center', width: '100%',marginTop:50,paddingLeft:10},
                header: {
                  justifyContent: 'space-between',
                  alignItems: 'center',

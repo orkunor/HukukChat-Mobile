@@ -90,17 +90,16 @@ const Login = () => {
           {({ handleChange, handleBlur, handleSubmit, values, errors, isValid }) => (
             <>
               <View style={styles.textContainerSignin}>
-                <View style={styles.imageContainer}>
                   <Image
                     style={styles.logo}
                     source={require('../../icons/1.png')}
                   />
-                </View>
               </View>
 
               <View style={styles.textInputContainer}>
                 <View style={styles.containerInput}>
                   <TextInput
+                  placeholderTextColor={'grey'}
                     placeholder="Kullanıcı Adı" // Değişiklik burada: email yerine username
                     style={styles.username}
                     onChangeText={handleChange('username')} // Değişiklik burada: email yerine username
@@ -112,6 +111,7 @@ const Login = () => {
 
                 <View style={styles.containerInput}>
                   <TextInput
+                    placeholderTextColor={'grey'}
                     placeholder="Şifre"
                     style={styles.password}
                     onChangeText={handleChange('password')}
@@ -119,12 +119,13 @@ const Login = () => {
                     value={values.password}
                     secureTextEntry
                   />
+                  
                   {errors.password && <Text style={styles.errorText}>{errors.password}</Text>}
                   <TouchableOpacity onPress={()=> {
                       navigation.navigate('ResetPassword')
   
                   }} style={{marginLeft:5,marginTop:2}}>
-                  <Text>Şifremi Unuttum</Text>
+                  <Text style={{color:'black'}}>Şifremi Unuttum</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -159,13 +160,12 @@ export default Login;
 
 
 const styles = StyleSheet.create({
-  container: { backgroundColor: orangeColor, flex: 1, marginHorizontal: 40 },
-  username: { height: 50, width: 300, backgroundColor: 'white', paddingLeft: 15, borderRadius: 8,  },
-  password: { height: 50, width: 300, backgroundColor: 'white', paddingLeft: 15, borderRadius: 8 },
-  textContainerSignin: { marginTop: 50 },
+  container: { backgroundColor: orangeColor, flex: 1,justifyContent:'center',alignItems:'center' },
+  username: { height: 50, width: 300, backgroundColor: 'white', paddingLeft: 15, borderRadius: 8,color:'black'  },
+  password: { height: 50, width: 300, backgroundColor: 'white', paddingLeft: 15, borderRadius: 8,color:'black' },
   textInputContainer: { marginTop: 30 },
-  button: { backgroundColor: 'white', height: 50, justifyContent: 'center', alignItems: 'center', width: 300, borderRadius: 100 ,marginTop:25},
-  buttonText: { color: orangeColor, fontWeight: '600', fontSize: 18 },
+  button: { backgroundColor: 'white', height: 50, justifyContent: 'center', alignItems: 'center', width: 300, borderRadius: 100 ,marginTop:45},
+  buttonText: { color: orangeColor, fontWeight: '800', fontSize: 18 },
   imageContainer: { alignItems: 'center', justifyContent: 'center' },
   logo: { height: 225, width: 325 },
   errorText: {
@@ -177,5 +177,8 @@ const styles = StyleSheet.create({
     height:65,
     marginBottom:10
   },
+  textContainerSignin:{
+    marginBottom:30
+  }
   
 });

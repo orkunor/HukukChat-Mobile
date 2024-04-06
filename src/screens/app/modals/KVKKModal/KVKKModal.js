@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import Modal from 'react-native-modal';
 import { useSelector, useDispatch } from 'react-redux';
@@ -8,9 +8,26 @@ import { WebView } from 'react-native-webview';
 import { orangeColor } from '../../../../statics/color';
 import { Plane } from 'react-native-animated-spinkit';
 import { selectIsKVKKModalVisible, toggleKVKKModalVisible } from '../../../../slices/modalSlices';
+import { BackHandler } from 'react-native';
 
 const CustomWebView = ({ uri, onClose }) => {
   const [loading, setLoading] = useState(true);
+
+
+  useEffect(() => {
+    const backAction = () => {
+      dispatch(toggleKVKKModalVisible(false))
+      return true
+      ;
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+
+    return () => backHandler.remove();
+  }, []);
 
   return (
     <View style={{ flex: 1 }}>
@@ -48,6 +65,9 @@ const KVKKModal = () => {
       animationInTiming={500}
       animationOutTiming={500}
       backdropOpacity={1}
+      onRequestClose={() => {
+        dispatch(toggleKVKKModalVisible(false))
+     }}
       backdropColor="#D77A25"
     >
       <SafeAreaView style={{ flex: 1,backgroundColor:orangeColor }}>
@@ -66,7 +86,7 @@ export default KVKKModal;
 const styles = StyleSheet.create({
   closeButton: {
     position: 'absolute',
-    top: 20,
+    top: 60,
     right: 20,
     zIndex: 1,
     backgroundColor: 'white',

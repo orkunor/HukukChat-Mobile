@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import Modal from 'react-native-modal';
 import { useSelector, useDispatch } from 'react-redux';
@@ -8,9 +8,12 @@ import { WebView } from 'react-native-webview';
 import { orangeColor } from '../../../../statics/color';
 import { Plane } from 'react-native-animated-spinkit';
 import { selectIsKVKKModalVisible, selectIsLicenceModalVisible, toggleKVKKModalVisible, toggleLicenceModalVisible } from '../../../../slices/modalSlices';
-
+import { BackHandler } from 'react-native';
 const CustomWebView = ({ uri, onClose }) => {
   const [loading, setLoading] = useState(true);
+
+
+
 
   return (
     <View style={{ flex: 1 }}>
@@ -48,6 +51,9 @@ const LicenceModal = () => {
       animationOutTiming={500}
       backdropOpacity={1}
       backdropColor="#D77A25"
+      onRequestClose={() => {
+        dispatch(toggleLicenceModalVisible(false))
+     }}
     >
       <SafeAreaView style={{ flex: 1 }}>
         <CustomWebView
@@ -65,7 +71,7 @@ export default LicenceModal;
 const styles = StyleSheet.create({
   closeButton: {
     position: 'absolute',
-    top: 20,
+    top: 60,
     right: 20,
     zIndex: 1,
     backgroundColor: 'white',

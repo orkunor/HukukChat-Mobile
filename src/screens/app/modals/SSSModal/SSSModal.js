@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View,TouchableOpacity } from 'react-native'
-import React from 'react'
+import React,{useEffect} from 'react'
 import Modal from 'react-native-modal'
 import { useDispatch, useSelector } from 'react-redux'
 import { SafeAreaView } from 'react-native-safe-area-context'
@@ -7,10 +7,16 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { selectIsAccountSettingsModalVisible, selectIsHelpModalVisible, selectIsSSSModalVisible, toggleAccountSettingsModalVisible, toggleHelpModalVisible, toggleSSSModalVisible } from '../../../../slices/modalSlices'
 import { blueColor, orangeColor } from '../../../../statics/color'
 import { ScrollView } from 'react-native-gesture-handler'
+import { BackHandler } from 'react-native';
 
 const SSSModal = () => {
                const selectModalVisible = useSelector(selectIsSSSModalVisible)
                const dispatch = useDispatch()
+
+             
+            
+            
+               
   return (
                <Modal
                style={{flex:1}}
@@ -21,6 +27,9 @@ const SSSModal = () => {
                animationInTiming={500}
                animationOutTiming={500}
                backdropOpacity={1}
+               onRequestClose={() => {
+                  dispatch(toggleSSSModalVisible(false))
+               }}
                backdropColor='#D77A25'
              >
                
@@ -94,7 +103,7 @@ const styles = StyleSheet.create({
                  justifyContent: 'center',
                  alignItems: 'center',
                },
-               containerTop: {height: 50, alignItems: 'center', width: '100%'},
+               containerTop: {height: 50, alignItems: 'center', width: '100%',marginTop:20},
                header: {
                  justifyContent: 'space-between',
                  alignItems: 'center',

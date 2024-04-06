@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View,TouchableOpacity } from 'react-native'
-import React, { useState } from 'react'
+import React, { useState,useEffect } from 'react'
 import Modal from 'react-native-modal';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectIsChatScreenMenuModalVisible, toggleChatScreenMenuVisible } from '../../../../slices/modalSlices';
@@ -13,6 +13,7 @@ import LicenceModal from '../LicenceModal/LicenceModal';
 import SSSModal from '../SSSModal/SSSModal';
 import KVKKModal from '../KVKKModal/KVKKModal';
 import { orangeColor } from '../../../../statics/color';
+import { BackHandler } from 'react-native';
 
 const ChatScreenMenuModal = () => {
  const selectModalVisible = useSelector(selectIsChatScreenMenuModalVisible)
@@ -50,6 +51,8 @@ const ChatScreenMenuModal = () => {
   },
 ])
 
+
+
  const MenuFlatlistItem = ({item}) => {
 
   return(
@@ -72,8 +75,11 @@ const ChatScreenMenuModal = () => {
   animationInTiming={500}
   animationOutTiming={500}
   backdropColor='#D77A25'
+  onRequestClose={() => {
+    dispatch(toggleChatScreenMenuVisible(false))
+ }}
 >
-  <SafeAreaView style={{flex:1,paddingTop:20,paddingHorizontal:15}}>
+  <SafeAreaView style={{flex:1,paddingHorizontal:15}}>
     <AccountSettingsModal/>
     <HelpModal/>
     <LicenceModal/>
@@ -102,7 +108,8 @@ export default ChatScreenMenuModal
 
 const styles = StyleSheet.create({
   topConatiner:{
-    height:50
+    height:50,
+    marginTop:50
   }
 
 })

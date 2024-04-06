@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Image, View, Text, TextInput, StyleSheet, TouchableOpacity, SafeAreaView } from "react-native";
+import { Image, View, Text, TextInput, StyleSheet, TouchableOpacity, SafeAreaView, KeyboardAvoidingView } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { orangeColor } from "../../statics/color";
 import { Formik } from 'formik'
@@ -24,8 +24,6 @@ const Register = () => {
   });
 
   const handleRegister = (values) => {
-    
-
     // values içinde form alanlarının değerlerine erişebilirsiniz
     setLoading(true);
     
@@ -85,6 +83,7 @@ const Register = () => {
   }
   return (
     <SafeAreaView style={styles.container}>
+    <KeyboardAvoidingView style={styles.container} behavior="padding" enabled>
     <ServerErrorModal />
     <MailAlreadyInUse/>
     <UserNameAlreadyInUse/>
@@ -109,6 +108,7 @@ const Register = () => {
           <View style={styles.textInputContainer}>
             <View style={styles.containerInput}>
             <TextInput
+            placeholderTextColor={'grey'}
               placeholder="Kullanıcı adı"
               style={styles.input}
               onChangeText={handleChange('username')}
@@ -121,6 +121,8 @@ const Register = () => {
           <View style={styles.containerInput}>
 
             <TextInput
+                        placeholderTextColor={'grey'}
+
               placeholder="Şifre"
               style={styles.input}
               onChangeText={handleChange('password')}
@@ -133,6 +135,8 @@ const Register = () => {
 <View style={styles.containerInput}>
 
             <TextInput
+                        placeholderTextColor={'grey'}
+
               placeholder="E-mail"
               style={styles.input}
               onChangeText={handleChange('email')}
@@ -184,6 +188,7 @@ const Register = () => {
         </>
       )}
     </Formik>
+    </KeyboardAvoidingView>
   </SafeAreaView>
   );
 }
@@ -204,9 +209,7 @@ const styles = StyleSheet.create({
     height: 225,
     width: 325,
   },
-  textInputContainer: {
-    marginBottom: 20,
-  },
+ 
   input: {
     height: 50,
     width: 300,
@@ -214,6 +217,7 @@ const styles = StyleSheet.create({
     paddingLeft: 15,
     borderRadius: 8,
     marginBottom: 0,
+    color:'black'
   },
   button: {
     backgroundColor: 'white',
@@ -226,14 +230,14 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: orangeColor,
-    fontWeight: '600',
+    fontWeight: '800',
     fontSize: 18,
   },
   optionLoginContainer: {
     flexDirection: 'row',
     marginBottom: 20,
-
   },
+  
   optionText: {
     color: 'white',
     marginRight: 5,
