@@ -22,7 +22,6 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import ChatScreenMenuModal from "../modals/menuModals/ChatScreenMenuModal";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleChatScreenMenuVisible, toggleServerErrorModalVisible, toggleWarningFuncVisible } from "../../../slices/modalSlices";
-import AccountSettingsModal from "../modals/AccountSettingsModal/AccountSettingsModal";
 import { Flow } from 'react-native-animated-spinkit';
 import { blueColor, greyColor, orangeColor } from "../../../statics/color";
 import { selectSignIn } from "../../../slices/authSlices";
@@ -39,6 +38,7 @@ const Chat = ({ navigation }) => {
   const[message,setMessage] = useState("")
   const [buttonText,setButtonText] = useState("")
   const [userData,setUserData] = useState()
+  const [textId,setTextId] = useState(0)
   const [data, setData] = useState([
     {
       title:"Merhabalar ben Hukuk Chat size nasıl yardımcı olabilirim?null",
@@ -69,12 +69,12 @@ const fetchSubscriptionPlans = () => {
     throw new Error('Network response was not ok.');
   })
   .then(data => {
-    // Burada data ile yapılmak istenen işlemleri gerçekleştirin
+
     setUserData(data);
 
   })
   .catch(error => {
-    console.error('There was a problem with your fetch operation:', error);
+
   });
  }
 
@@ -83,7 +83,6 @@ const fetchSubscriptionPlans = () => {
 }, []);
 
 const handleResetChatHistory = () => {
-
   fetch('https://api.hukukchat.com/reset_session/', {
     method: 'POST',
     headers: {
@@ -97,14 +96,14 @@ const handleResetChatHistory = () => {
   })
   .then(response => response.json())
   .then(data => {
-    if(data.status === "success"){
-dispatch(toggleWarningFuncVisible(true))
-setMessage("Geçmişiniz sıfırlandı yeni sorular sorabilirsiniz.")
-setButtonText("Tamamla")
-setData([{
-  title:"Merhabalar ben Hukuk Chat size nasıl yardımcı olabilirim?null",
-  owner:"Ai"
-}])
+      if(data.status === "success"){
+    dispatch(toggleWarningFuncVisible(true))
+    setMessage("Geçmişiniz sıfırlandı yeni sorular sorabilirsiniz.")
+    setButtonText("Tamamla")
+    setData([{
+      title:"Merhabalar ben Hukuk Chat size nasıl yardımcı olabilirim?null",
+      owner:"Ai"
+  }])
     }
     else{
       dispatch(toggleServerErrorModalVisible(true))
@@ -113,6 +112,7 @@ setData([{
         owner:"Ai"
       }])
     }
+
     
   })
   .catch(error => {
@@ -150,10 +150,11 @@ setData([{
     eventSource.addEventListener("message", (event) => {
       try {
         const chunk = JSON.parse(event.data);
-        console.log(chunk)
         accumulatedData += chunk.text
         const newChatItem = { title: accumulatedData,
-          owner:"Ai" }; 
+          owner:"Ai",
+          textId:textId+1
+        }; 
         
         if(chunk.text == null){
           setData(prevData => [...prevData, newChatItem]);
@@ -161,17 +162,8 @@ setData([{
           setMessageWaiting(false)
           return eventSource.close();
           }
-
-       /*const lastNewlineIndex = accumulatedData.lastIndexOf('\n');
-        if (lastNewlineIndex !== -1) {
-          const responseData = JSON.parse(accumulatedData.slice(lastNewlineIndex + 1));
-          const newChatItem = { title: responseData.text }; // Assuming responseData has a text field
-          setData(prevData => [...prevData, newChatItem]);
-          accumulatedData = accumulatedData.slice(0, lastNewlineIndex + 1); // Reset accumulatedData to the remaining chunk
-        }*/
-
+          
       } catch (error) {
-        console.error("Error parsing JSON data:", error);
         setMessageWaiting(false)
         dispatch(toggleServerErrorModalVisible(true))
       }
@@ -179,14 +171,17 @@ setData([{
     });
   
     eventSource.addEventListener("error", (event) => {
-      if (event.type === "error") {
-        console.error("Connection error:", event.message);
+      let errorMessage = JSON.parse(event.message)
+      if (errorMessage.message =="An error occurred: Doğrulama süresi doldu. Lütfen tekrar giriş yapın."){
+        setMessage("Oturum süreniz doldu. Lütfen tekrar giriş yapınız.")
+        setButtonText("Giriş Yap")
+        setMessageWaiting(false)
+        dispatch(toggleWarningFuncVisible(true))
+      } 
+      else if (event.type === "errorr") {
         setMessageWaiting(false)
         dispatch(toggleServerErrorModalVisible(true))
-
-
       } else if (event.type === "exception") {
-        console.error("Error:", event.message, event.error);
         setMessageWaiting(false)
       }
     });
@@ -205,7 +200,7 @@ setData([{
     <SafeAreaView style={{ flex: 1, margin: 0 }}>
       <ChatScreenMenuModal />
       <ServerErrorModal/>
-      <WarningFunc message={message} button={buttonText}/>
+      <WarningFunc message={message} button={buttonText} />
       <View style={styles.bigContainer}>
         <View style={styles.headTextContainer}>
           <Text style={styles.headText}>HukukChat</Text>
