@@ -39,10 +39,12 @@ const Chat = ({ navigation }) => {
   const [buttonText,setButtonText] = useState("")
   const [userData,setUserData] = useState()
   const [textId,setTextId] = useState(0)
+  const [index,setIndex] = useState(0)
   const [data, setData] = useState([
     {
       title:"Merhabalar ben Hukuk Chat size nasıl yardımcı olabilirim?null",
-      owner:"Ai"
+      owner:"Ai",
+      index:index
     }
      ]);
 
@@ -102,14 +104,17 @@ const handleResetChatHistory = () => {
     setButtonText("Tamamla")
     setData([{
       title:"Merhabalar ben Hukuk Chat size nasıl yardımcı olabilirim?null",
-      owner:"Ai"
+      owner:"Ai",
+      index:index
   }])
+  
     }
     else{
       dispatch(toggleServerErrorModalVisible(true))
       setData([{
         title:"Merhabalar ben Hukuk Chat size nasıl yardımcı olabilirim?null",
-        owner:"Ai"
+        owner:"Ai",
+        index:index
       }])
     }
 
@@ -120,7 +125,8 @@ const handleResetChatHistory = () => {
     dispatch(toggleServerErrorModalVisible(true))
     setData([{
       title:"Merhabalar ben Hukuk Chat size nasıl yardımcı olabilirim?null",
-      owner:"Ai"
+      owner:"Ai",
+      index:index
     }])
 
   });
@@ -151,9 +157,11 @@ const handleResetChatHistory = () => {
       try {
         const chunk = JSON.parse(event.data);
         accumulatedData += chunk.text
-        const newChatItem = { title: accumulatedData,
+        const newChatItem = { 
+          
+          title: accumulatedData,
           owner:"Ai",
-          textId:textId+1
+          index:index+1
         }; 
         
         if(chunk.text == null){
