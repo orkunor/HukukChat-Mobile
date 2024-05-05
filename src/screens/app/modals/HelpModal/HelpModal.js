@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View,TouchableOpacity ,TextInput} from 'react-native'
+import { StyleSheet, Text, View,TouchableOpacity ,TextInput,KeyboardAvoidingView} from 'react-native'
 import React, { useEffect, useState } from 'react'
 import Modal from 'react-native-modal'
 import { useDispatch, useSelector } from 'react-redux'
@@ -121,6 +121,8 @@ useEffect(() => {
               <NoteSended/>
               <ServerErrorModal/>
                <SafeAreaView style={{flex:1,margin:0,backgroundColor:'white'}}>
+               <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === "ios" ? "padding" : null} enabled>
+
                 <ScrollView>
 
                <View style={styles.containerTop}>
@@ -188,7 +190,7 @@ useEffect(() => {
 </TouchableOpacity>
                </View>
                </ScrollView>
-
+                </KeyboardAvoidingView>
                </SafeAreaView>
              </Modal>
   )

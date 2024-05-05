@@ -9,6 +9,7 @@ import {
   StyleSheet,
   Text,
   TextInput,
+  KeyboardAvoidingView,
   TouchableOpacity,
   View,
 } from "react-native";
@@ -140,7 +141,7 @@ const handleResetChatHistory = () => {
     setData(prevData => [...prevData, myrequest]);
     setReq('')
 
-    const eventSource = new EventSource('https://api.hukukchat.com/generate_response/', {
+    const eventSource = new EventSource('https://api.hukukchat.com/generate_mobile_response/', {
       headers: {
         'Authorization': `Bearer ${selectUserToken}`,
         "Content-Type": "application/json"
@@ -148,7 +149,8 @@ const handleResetChatHistory = () => {
       body: JSON.stringify({
         user_question: req,  
         selected_model: "gpt-4",
-        selected_law_area: "Genel Hukuk"
+        selected_law_area: "Genel Hukuk",
+
       }),
       method: 'POST'
     });
@@ -158,7 +160,6 @@ const handleResetChatHistory = () => {
         const chunk = JSON.parse(event.data);
         accumulatedData += chunk.text
         const newChatItem = { 
-          
           title: accumulatedData,
           owner:"Ai",
           index:index+1
@@ -206,6 +207,8 @@ const handleResetChatHistory = () => {
 
   return (
     <SafeAreaView style={{ flex: 1, margin: 0 }}>
+            <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === "ios" ? "padding" : null} enabled>
+
       <ChatScreenMenuModal />
       <ServerErrorModal/>
       <WarningFunc message={message} button={buttonText} />
@@ -254,6 +257,7 @@ const handleResetChatHistory = () => {
           </View>
         </View>
       </View>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 };

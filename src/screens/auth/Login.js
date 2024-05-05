@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Image, View, Text, TextInput, StyleSheet, TouchableOpacity, SafeAreaView, StatusBar } from "react-native";
+import { Image, View, Text,KeyboardAvoidingView, TextInput, StyleSheet, TouchableOpacity, SafeAreaView, StatusBar } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { orangeColor } from "../../statics/color";
 import { Formik } from 'formik';
@@ -78,6 +78,8 @@ const Login = () => {
 
   return (
     <SafeAreaView style={{ backgroundColor: orangeColor, flex: 1 }}>
+    <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === "ios" ? "padding" : null} enabled>
+
       <WrongPassOrMailModal />
       <ServerErrorModal />
      
@@ -153,6 +155,7 @@ const Login = () => {
           )}
         </Formik>
       </View>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   )
 }

@@ -120,13 +120,10 @@ const AccountSettingsModal = () => {
                 <Text style={{color:'white'}}>Abonelik Başlangıç : </Text>
                 <Text style={{color:'white',fontWeight:'600'}}>{userData ? formatDate(userData.subscription.start_date) : null}</Text>
                 </View>
-                <View style={{flexDirection:'row',alignItems:'center',marginTop:15}}>
-                <Text style={{color:'white'}}>Abonelik Bitiş : </Text>
-                <Text style={{color:'white',fontWeight:'600'}}>{userData ? formatDate(userData.subscription.end_date): null}</Text>
-                </View>
+               
                 <View style={{flexDirection:'row',alignItems:'center',marginTop:15}}>
                 <Text style={{color:'white'}}>Kalan Kontür : </Text>
-                <Text style={{color:"white",fontWeight:'600',fontSize:16}}>{userData ? userData.subscription.credits : null}</Text>
+                <Text style={{color:"white",fontWeight:'600',fontSize:16}}>{userData ? userData.subscription.mobile_credits : null}</Text>
                 </View>
               </View>
               </LinearGradient>
