@@ -12,6 +12,7 @@ import {
   KeyboardAvoidingView,
   TouchableOpacity,
   View,
+  Keyboard
 } from "react-native";
 
 import EventSource, { EventSourceListener } from "react-native-sse";
@@ -22,13 +23,15 @@ import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import ChatScreenMenuModal from "../modals/menuModals/ChatScreenMenuModal";
 import { useDispatch, useSelector } from "react-redux";
-import { toggleChatScreenMenuVisible, toggleServerErrorModalVisible, toggleWarningFuncVisible } from "../../../slices/modalSlices";
+import { selectCounter, selectIsChatHistoryModalVisible, setCounter, toggleChatHistoryModalVisible, toggleChatScreenMenuVisible, toggleServerErrorModalVisible, toggleWarningFuncVisible } from "../../../slices/modalSlices";
 import { Flow } from 'react-native-animated-spinkit';
 import { blueColor, greyColor, orangeColor } from "../../../statics/color";
 import { selectSignIn } from "../../../slices/authSlices";
 import ServerErrorModal from "../modals/Warnings/ServerErrorModal";
 import { selectUserName } from "../../../slices/userSlices";
 import WarningFunc from "../modals/Warnings/WarningFunc";
+import ChatHistoryModal from "../modals/ChatHistoryModal/ChatHistoryModal";
+import { selectChatHistory, selectSessionToken, setChatHistory, setSessionToken } from "../../../slices/chatSlices";
 
 const Chat = ({ navigation }) => {
   const [req, setReq] = useState("");
@@ -41,6 +44,19 @@ const Chat = ({ navigation }) => {
   const [userData,setUserData] = useState()
   const [textId,setTextId] = useState(0)
   const [index,setIndex] = useState(0)
+  const [editButtonDisable,setEdditButtonDisable] = useState(true)
+  const [session_token,set_session_token] = useState("")
+  let counter = useSelector(selectCounter)
+  let sessionToken = useSelector(selectSessionToken)
+
+ 
+  
+  useEffect(() => {
+
+
+  },[sessionToken])
+
+
   const [data, setData] = useState([
     {
       title:"Merhabalar ben Hukuk Chat size nasıl yardımcı olabilirim?null",
@@ -48,10 +64,96 @@ const Chat = ({ navigation }) => {
       index:index
     }
      ]);
-
   const selectUserId = useSelector(selectUserName)
+  const dataFromChatHistory = useSelector(selectChatHistory)
+  let selectChatHistoryVisible = useSelector(selectIsChatHistoryModalVisible)
+  
+  useEffect(() => {
+
+    if(data.length > 1){
+    setEdditButtonDisable(false)
+    }else{
+      setEdditButtonDisable(true)
+    }
 
 
+  },[data])
+  const from_chat_history = (dataFromChatHistory) => {
+    // Gelen veriyi doğrudan inputData olarak kullan
+    const inputData = [dataFromChatHistory];
+  
+    // Eğer inputData boşsa veya bir array değilse, bir uyarı mesajı yazdır
+    if (!Array.isArray(inputData) || inputData.length === 0) {
+      console.log("Girdi verisi boş veya geçersiz.");
+      return;
+    }
+  
+    // Dönüştürülen veriyi saklamak için boş bir liste oluşturun
+    let outputData = [];
+    
+    // Mesajları takip etmek için bir index sayacı oluşturun
+    let indexCounter = 0;
+    
+    // Veriyi işlemek
+    inputData.forEach(session => {
+      // Oturumun undefined olup olmadığını kontrol et
+      if (session === undefined) {
+        console.log("Oturum verisi undefined.");
+        return;
+      }
+  
+      // Kullanıcı ve asistan mesajlarını ayrı listelere ekleyin
+      let userMessages = [];
+      let assistantMessages = [];
+  
+      // Kullanıcı mesajlarının var olup olmadığını kontrol et ve ekle
+      if (session.user_messages && session.user_messages.length > 0) {
+        session.user_messages.forEach(userMessage => {
+          userMessages.push({"index": indexCounter, "owner": "me", "title": userMessage});
+          indexCounter++;
+        });
+      }
+      
+      // Asistan mesajlarının var olup olmadığını kontrol et ve ekle
+      if (session.assistant_messages && session.assistant_messages.length > 0) {
+        session.assistant_messages.forEach(assistantMessage => {
+          assistantMessages.push({"index": indexCounter, "owner": "Ai", "title": assistantMessage});
+          indexCounter++;
+        });
+      }
+  
+      // Kullanıcı ve asistan mesajlarını dönüşümlü olarak outputData'ya ekle
+      const maxLength = Math.max(userMessages.length, assistantMessages.length);
+      for (let i = 0; i < maxLength; i++) {
+        if (i < userMessages.length) {
+          outputData.push(userMessages[i]);
+        }
+        if (i < assistantMessages.length) {
+          outputData.push(assistantMessages[i]);
+        }
+      }
+    });
+  
+    if (outputData.length > 0) {
+      setData(outputData);
+    }
+  };
+  
+   useEffect(() => {
+
+   from_chat_history(dataFromChatHistory)
+  
+  set_session_token(sessionToken)
+   },[counter])
+
+  const flatListRef = useRef(null); // Ref'i tanımla
+
+  // Diğer kodlar...
+
+  useEffect(() => {
+    // FlatList'e her güncelleme yapıldığında en altına kaydır
+    flatListRef.current.scrollToEnd({ animated: true });
+  }, [data]); // data state'i değiştiğinde useEffect'i tetikle
 
 let accumulatedData = ''; // Accumulate chunks into a single string
 
@@ -85,6 +187,23 @@ const fetchSubscriptionPlans = () => {
   fetchSubscriptionPlans();
 }, []);
 
+const updateDataAtLastIndex = (newData) => {
+  setData((prevData) => {
+    // Eğer veri dizisi boşsa, hiçbir güncelleme yapma
+    if (prevData.length === 0) {
+      return prevData;
+    }
+    // Önceki veri dizisinin bir kopyasını oluştur
+    const updatedData = [...prevData];
+    // Son indeksi al
+    const lastIndex = updatedData.length-1;
+    // Son indeksteki veriyi güncelle
+    updatedData[lastIndex] = newData;
+    // Güncellenmiş veriyi state'e kaydet
+    return updatedData;
+  });
+};
+
 const handleResetChatHistory = () => {
   fetch('https://api.hukukchat.com/reset_session/', {
     method: 'POST',
@@ -100,9 +219,8 @@ const handleResetChatHistory = () => {
   .then(response => response.json())
   .then(data => {
       if(data.status === "success"){
-    dispatch(toggleWarningFuncVisible(true))
-    setMessage("Geçmişiniz sıfırlandı yeni sorular sorabilirsiniz.")
-    setButtonText("Tamamla")
+        dispatch(setSessionToken(""))
+        set_session_token("")
     setData([{
       title:"Merhabalar ben Hukuk Chat size nasıl yardımcı olabilirim?null",
       owner:"Ai",
@@ -135,11 +253,27 @@ const handleResetChatHistory = () => {
 }
 
   const send = () => {
-    setMessageWaiting(true)
+   
+
     const myrequest = {title: req,
               owner:"me"}
-    setData(prevData => [...prevData, myrequest]);
-    setReq('')
+
+              setReq('')
+
+              setData( prevData => [...prevData,myrequest])
+
+              const loading = { 
+                title: "loading",
+                owner:"Ai",
+                index:index+1
+              }; 
+              setData(prevData => [...prevData,loading])
+
+              
+   
+              Keyboard.dismiss();
+              flatListRef.current.scrollToEnd({ animated: true });
+
 
     const eventSource = new EventSource('https://api.hukukchat.com/generate_mobile_response/', {
       headers: {
@@ -150,6 +284,7 @@ const handleResetChatHistory = () => {
         user_question: req,  
         selected_model: "gpt-4",
         selected_law_area: "Genel Hukuk",
+        session_id: sessionToken
 
       }),
       method: 'POST'
@@ -165,12 +300,16 @@ const handleResetChatHistory = () => {
           index:index+1
         }; 
         
+        
         if(chunk.text == null){
-          setData(prevData => [...prevData, newChatItem]);
           accumulatedData=''
           setMessageWaiting(false)
           return eventSource.close();
           }
+
+
+          updateDataAtLastIndex(newChatItem);
+
           
       } catch (error) {
         setMessageWaiting(false)
@@ -208,29 +347,45 @@ const handleResetChatHistory = () => {
   return (
     <SafeAreaView style={{ flex: 1, margin: 0 }}>
             <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === "ios" ? "padding" : null} enabled>
-
+      <ChatHistoryModal/>
       <ChatScreenMenuModal />
       <ServerErrorModal/>
+      <StatusBar  backgroundColor={"white"} barStyle={"dark-content"} />
       <WarningFunc message={message} button={buttonText} />
       <View style={styles.bigContainer}>
         <View style={styles.headTextContainer}>
+
+          <View style={styles.headLeftContainer}> 
+
+
+          <TouchableOpacity onPress={() => {
+
+            dispatch(toggleChatHistoryModalVisible(true))
+            dispatch(setCounter(counter + 1))
+            dispatch(setChatHistory(data))
+          }}>
+          <Ionicons name="albums-outline" size={27} color={orangeColor}></Ionicons>
+          </TouchableOpacity>
           <Text style={styles.headText}>HukukChat</Text>
+          </View>
+
           <View style={{flexDirection:'row'}}>
 
-          <TouchableOpacity style={{ marginRight: 5 }} onPress={handleResetChatHistory}>
-            <Ionicons name="add-circle-outline" size={27} color={"#193353"}></Ionicons>
+          <TouchableOpacity disabled={editButtonDisable} style={{ marginRight: 5 }} onPress={handleResetChatHistory}>
+            <FontAwesome5 name="edit" size={22} color={editButtonDisable == true ?  "#DCDCDC" : "#193353"}></FontAwesome5>
           </TouchableOpacity>
           <TouchableOpacity style={{ marginRight: 5 }} onPress={() => {
             dispatch(toggleChatScreenMenuVisible(true))
           }}>
             
-            <Ionicons name="grid-outline" size={25} color={"#193353"}></Ionicons>
+            <Ionicons name="chevron-forward-outline" size={25} color={"#193353"}></Ionicons>
           </TouchableOpacity>
           </View>
 
         </View>
         <View style={styles.contentContainer}>
           <FlatList
+          ref={flatListRef}
             data={data}
             renderItem={renderItem}
             style={styles.flatListContainer}
@@ -280,8 +435,8 @@ const styles = StyleSheet.create({
   headText: {
     fontSize: 25,
     fontWeight: "500",
-    color: "#D77A25",
-    marginLeft:25
+    color:blueColor,
+    marginLeft:15
   },
   contentContainer: {
     flex: 1,
@@ -298,6 +453,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     borderTopWidth: 2,
     borderColor:'white',
+    
     height:75
   },
   textInput: {
@@ -314,6 +470,12 @@ const styles = StyleSheet.create({
   sendButton:{
 
     height:25,width:25
-  }
+  },
+  headLeftContainer:{
+    flexDirection:'row',
+    justifyContent:'center',
+    alignItems:'center',
+    marginLeft:10
 
+  }
 })

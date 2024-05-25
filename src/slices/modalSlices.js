@@ -13,7 +13,9 @@ const initialState = {
   isNoteSendedVisible:false,
   isUserCreatedVisible:false,
   isUserNameAlreadyInUseVisible:false,
-  isWarningFuncVisible:false
+  isWarningFuncVisible:false,
+  isChatHistoryModalVisible:false,
+  counter: 0,
 };
 export const modalSlice = createSlice({
   name: 'modals',
@@ -59,6 +61,12 @@ export const modalSlice = createSlice({
     toggleWarningFuncVisible: (state, action) => {
       state.isWarningFuncVisible = action.payload;
     },
+    toggleChatHistoryModalVisible: (state, action) => {
+      state.isChatHistoryModalVisible = action.payload;
+    },
+    setCounter: (state, action) => {
+      state.counter = action.payload;
+    },
   },
 });
 
@@ -75,7 +83,9 @@ export const {
   toggleNoteSendedVisible,
   toggleUserCreated,
   toggleUserNameAlreadyInUseVisible,
-  toggleWarningFuncVisible
+  toggleWarningFuncVisible,
+toggleChatHistoryModalVisible,
+setCounter
 } = modalSlice.actions;
 
 export const selectIsChatScreenMenuModalVisible = state =>
@@ -103,4 +113,8 @@ export const selectIsServerErrorModalVisible = state =>
   state.modals.isUserCreatedVisible;
   export const selectIsWarningFuncVisible = state =>
   state.modals.isWarningFuncVisible;
+  export const selectIsChatHistoryModalVisible = state =>
+  state.modals.isChatHistoryModalVisible;
+  export const selectCounter = state =>
+  state.modals.counter;
 export default modalSlice.reducer;

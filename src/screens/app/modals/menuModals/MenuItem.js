@@ -7,6 +7,7 @@ import {useDispatch} from 'react-redux';
 import { toggleAccountSettingsModalVisible, toggleCardModal, toggleChatScreenMenuVisible, toggleHelpModalVisible, toggleKVKKModalVisible, toggleLicenceModalVisible, togglePaymentsModal, toggleSSSModalVisible, toggleVerificationModal, toggleWalletModal} from '../../../../slices/modalSlices';
 import { useNavigation } from '@react-navigation/native';
 import { setSignIn } from '../../../../slices/authSlices';
+import { orangeColor } from '../../../../statics/color';
 const MenuItem = ({item}) => {
   const dispatch = useDispatch();
   const navigation = useNavigation()
@@ -68,16 +69,16 @@ const MenuItem = ({item}) => {
         alignItems: 'center',
         width: '100%',
         flexDirection: 'row',
-        borderColor:'white'
+        borderColor:orangeColor
       }}>
-      <FontAwesome5Icon name={`${item.icon}`} size={22} color={"white"}></FontAwesome5Icon>
+      <FontAwesome5Icon name={`${item.icon}`} size={22} color={orangeColor}></FontAwesome5Icon>
       <Text
         style={{
           fontSize: 22,
           fontWeight: '500',
           textAlign: 'center',
           marginLeft: 15,
-          color:"white"
+          color:orangeColor
         }}>
         {item.desc}
       </Text>

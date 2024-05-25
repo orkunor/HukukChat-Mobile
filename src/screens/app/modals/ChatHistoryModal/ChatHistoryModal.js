@@ -2,7 +2,7 @@ import { StyleSheet, Text, View,TouchableOpacity } from 'react-native'
 import React, { useState,useEffect } from 'react'
 import Modal from 'react-native-modal';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectIsChatScreenMenuModalVisible, toggleChatScreenMenuVisible } from '../../../../slices/modalSlices';
+import { selectCounter, selectIsChatHistoryModalVisible, selectIsChatScreenMenuModalVisible, selectIsWarningFuncVisible, toggleChatHistoryModalVisible, toggleChatScreenMenuVisible } from '../../../../slices/modalSlices';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { FlatList } from 'react-native-gesture-handler';
@@ -14,44 +14,15 @@ import SSSModal from '../SSSModal/SSSModal';
 import KVKKModal from '../KVKKModal/KVKKModal';
 import { orangeColor } from '../../../../statics/color';
 import { BackHandler } from 'react-native';
+import { selectSignIn } from '../../../../slices/authSlices';
 
-const ChatScreenMenuModal = () => {
- const selectModalVisible = useSelector(selectIsChatScreenMenuModalVisible)
+const ChatHistoryModal = () => {
+ const selectModalVisible = useSelector(selectIsChatHistoryModalVisible)
  const dispatch = useDispatch()
- const [menuData,setMenuData] = useState([
-  {
-    "id": "1",
-    "desc":"Hesap Bilgileri",
-    "icon":"cog"
-  },
-  {
-    "id": "2",
-    "desc":"Yardım",
-    "icon":"hands-helping"
-  },
-  {
-    "id": "4",
-    "desc":"Sıkça Sorulan Sorular",
-    "icon":"question"
-  },
-  {
-    "id": "3",
-    "desc":"Çerez Politikası",
-    "icon":"certificate"
-  },
-  {
-    "id": "5",
-    "desc":"KVKK",
-    "icon":"database"
-  },
-  {
-    "id": "6",
-    "desc":"Çıkış Yap",
-    "icon":"sign-out-alt"
-  },
-])
-
-
+ const selectUserToken = useSelector(selectSignIn)
+ const [menuData,setMenuData] = useState([])
+const selectWarningFuncVisible = useSelector(selectIsWarningFuncVisible)
+let counter = useSelector(selectCounter)
 
  const MenuFlatlistItem = ({item}) => {
 
@@ -59,42 +30,66 @@ const ChatScreenMenuModal = () => {
 
     <MenuItem item={item}/>
   )
-
-  
-
-
-
  }
+
+const handleGetChatHistory = () => {
+
+  fetch('https://api.hukukchat.com/get_chat_history/', {
+  method: 'GET',
+  headers: {
+    Accept: 'application/json',
+    Authorization: `Bearer ${selectUserToken}`,
+  }
+})
+.then(response => response.json())
+.then(data => {
+  const filteredData = data.data.filter(item => item.user_messages.length > 0);
+  setMenuData(filteredData);
+})
+.catch(error => {
+  console.error('Hata:', error);
+});
+
+}
+
+
+
+ useEffect(() => {
+
+  handleGetChatHistory()
+
+
+ },[counter])
+
+
+ 
   return (
     <Modal
   style={{flex:1,margin:0,bottom:0,backgroundColor:"white"}}
   isVisible={selectModalVisible}
   hasBackdrop={true}
-  animationIn={'slideInRight'}
-  animationOut={'slideOutRight'}
+  animationIn={'slideInLeft'}
+  animationOut={'slideOutLeft'}
   animationInTiming={500}
   animationOutTiming={500}
-  backdropColor='white'
+  backdropColor='#D77A25'
   onRequestClose={() => {
-    dispatch(toggleChatScreenMenuVisible(false))
+    dispatch(toggleChatHistoryModalVisible(false))
  }}
 >
   <SafeAreaView style={{flex:1,paddingHorizontal:15}}>
-    <AccountSettingsModal/>
-    <HelpModal/>
-    <LicenceModal/>
-    <SSSModal/>
-    <KVKKModal/>
+   
   <View style={styles.topConatiner}>
     <TouchableOpacity
-              style={{marginLeft: 15,}}
-              onPress={() => dispatch(toggleChatScreenMenuVisible(false))}>
-              <Ionicons name="arrow-back-outline" size={35} color={orangeColor} />
+              style={{marginRight:10}}
+              onPress={() => dispatch(toggleChatHistoryModalVisible(false))}>
+              <Ionicons name="close-outline" size={35} color={'black'} />
             </TouchableOpacity>
             </View>
             
             <FlatList
             style={{flex:1}}
+            showsVerticalScrollIndicator={false}
             data={menuData}
             renderItem={MenuFlatlistItem}
             />
@@ -104,12 +99,14 @@ const ChatScreenMenuModal = () => {
   )
 }
 
-export default ChatScreenMenuModal
+export default ChatHistoryModal
 
 const styles = StyleSheet.create({
   topConatiner:{
     height:50,
-    marginTop:50
+    marginTop:50,
+    flexDirection:"row",
+    justifyContent:'flex-end'
   }
 
 })

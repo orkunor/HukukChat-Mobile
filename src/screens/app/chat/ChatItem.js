@@ -1,5 +1,7 @@
 import React from "react";
 import { View, SafeAreaView, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
+import { Wave } from 'react-native-animated-spinkit';
+import { blueColor, orangeColor } from "../../../statics/color";
 
 const ChatItem = ({ item, index }) => {
     function gosterme(str) {
@@ -19,7 +21,7 @@ const ChatItem = ({ item, index }) => {
                         (item.owner == "Ai")
                             ?
                             <Image style={styles.imageai}
-
+                            tintColor={"#D77A25"}
                                 source={require(`../../../icons/1.png`)} />
                             :
                             <Image style={styles.imageai}
@@ -29,7 +31,26 @@ const ChatItem = ({ item, index }) => {
                 </View>
             </View>
         );
-    } else {
+    } else if (item.title === "loading"){
+            return(
+                <View style={(item.owner == "Ai") ? styles.ai : styles.user}>
+                <View style={styles.container}>
+                    {
+                        (item.owner == "Ai")
+                            ?
+                            <Image style={styles.imageai}
+                            tintColor={"#D77A25"}
+                            source={require(`../../../icons/1.png`)} />
+                            :
+                            <Image style={styles.imageai}
+                                source={require(`../../../icons/0.png`)} />
+                    }
+                                                <Wave size={25} color={orangeColor} />
+                </View>
+            </View>
+            )
+    }
+    else {
         return (
             <View style={(item.owner == "Ai") ? styles.ai : styles.user}>
                 <View style={styles.container}>
@@ -37,6 +58,7 @@ const ChatItem = ({ item, index }) => {
                         (item.owner == "Ai")
                             ?
                             <Image style={styles.imageai}
+                                tintColor={"#D77A25"}
                                 source={require(`../../../icons/1.png`)} />
                             :
                             <Image style={styles.imageai}
@@ -53,20 +75,21 @@ export default ChatItem;
 
 const styles = StyleSheet.create({
     ai: {
-        backgroundColor: '#D77A25'
-
-    },
-    user: {
         backgroundColor: 'white'
 
     },
-    aiText: { marginRight: 75,        color: 'white',
+    user: {
+    backgroundColor:"#E5E4E2"
+    },
+    aiText: { marginRight: 75,        color: blueColor,
 },
     userText: {
-        marginRight: 75
+        marginRight: 75,
+        color: orangeColor,
+        fontWeight:'400'
     },
     container: {
         minHeight: 75, marginTop: 2, justifyContent: 'flex-start', paddingTop: 10, paddingBottom: 10, flexDirection: 'row', alignItems: 'center', paddingRight: 25
     },
-    imageai: { height: 35, width: 55, marginRight: 15, marginLeft: 25 }
+    imageai: { height: 25, width: 38, marginRight: 15, marginLeft: 25 }
 });

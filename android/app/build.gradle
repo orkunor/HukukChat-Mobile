@@ -81,19 +81,21 @@ android {
         applicationId "com.hukukchat"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
-        versionName "1.0"
+        versionCode 3 // increment this number
+        versionName "1.2" // update this to reflect the new version
     }
     signingConfigs {
-         release {
+        release {
             if (project.hasProperty('MYAPP_UPLOAD_STORE_FILE')) {
                 storeFile file(MYAPP_UPLOAD_STORE_FILE)
                 storePassword MYAPP_UPLOAD_STORE_PASSWORD
                 keyAlias MYAPP_UPLOAD_KEY_ALIAS
                 keyPassword MYAPP_UPLOAD_KEY_PASSWORD
             }
-            }
-            /*
+
+           
+            } 
+            
             debug {
             storeFile file('debug.keystore')
             storePassword 'android'
@@ -101,7 +103,7 @@ android {
             keyPassword 'android'
              }
 
-            */
+            
        
     }
     buildTypes {
