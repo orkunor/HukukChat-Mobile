@@ -30,7 +30,7 @@ const SSSModal = () => {
                onRequestClose={() => {
                   dispatch(toggleSSSModalVisible(false))
                }}
-               backdropColor='#D77A25'
+               backdropColor='white'
              >
                
                <SafeAreaView style={{flex:1,margin:0}}>
@@ -44,10 +44,10 @@ const SSSModal = () => {
                 }}>
                 <Ionicons
                   name="arrow-back-outline"
-                  color={'white'}
+                  color={orangeColor}
                   size={35}></Ionicons>
               </TouchableOpacity>
-              <Text style={styles.headerName}>SSS</Text>
+              <Text style={styles.headerName}>Sıkça Sorulan Sorular</Text>
             </View>
           </View>
         </View>
@@ -56,7 +56,7 @@ const SSSModal = () => {
 
          
           <View style={{marginHorizontal:0,backgroundColor:'white',minHeight:150,marginTop:10,borderRadius:8,padding:10}}>
-          <View style={{backgroundColor:blueColor,minHeight:25,paddingLeft:10,borderRadius:7,justifyContent:'center'}}>
+          <View style={{backgroundColor:orangeColor,minHeight:25,paddingLeft:10,borderRadius:7,justifyContent:'center'}}>
           <Text style={{color:'white',fontWeight:'600'}}>Neden HukukChat?</Text>
           </View>
           <View style={{minHeight:25,paddingLeft:10,borderRadius:7,justifyContent:'center',marginTop:5,padding:10}}>
@@ -65,7 +65,7 @@ const SSSModal = () => {
           </View>
           </View>
           <View style={{marginHorizontal:0,backgroundColor:'white',minHeight:150,marginTop:10,borderRadius:8,padding:10}}>
-          <View style={{backgroundColor:blueColor,minHeight:25,paddingLeft:10,borderRadius:7,justifyContent:'center'}}>
+          <View style={{backgroundColor:orangeColor,minHeight:25,paddingLeft:10,borderRadius:7,justifyContent:'center'}}>
           <Text style={{color:'white',fontWeight:'600'}}>HukukChat'ın Rakiplerinden Farkları?</Text>
           </View>
           <View style={{minHeight:25,paddingLeft:10,borderRadius:7,justifyContent:'center',marginTop:5,padding:10}}>
@@ -74,7 +74,7 @@ HukukChat, sadece bir uygulama değil, aynı zamanda sürekli evrilen, teknoloji
           </View>
           </View>
           <View style={{marginHorizontal:0,backgroundColor:'white',minHeight:150,marginTop:10,borderRadius:8,padding:10}}>
-          <View style={{backgroundColor:blueColor,minHeight:25,paddingLeft:10,borderRadius:7,justifyContent:'center'}}>
+          <View style={{backgroundColor:orangeColor,minHeight:25,paddingLeft:10,borderRadius:7,justifyContent:'center'}}>
           <Text style={{color:'white',fontWeight:'600'}}>Daha Detaylı Bilgilere Nereden Ulaşırım?</Text>
           </View>
           <View style={{minHeight:25,paddingLeft:10,borderRadius:7,justifyContent:'center',marginTop:5,padding:10}}>
@@ -113,7 +113,7 @@ const styles = StyleSheet.create({
                  borderBottomWidth: 0.3,
                  borderColor: 'white',
                },
-               headerName: {fontWeight: '600', fontSize: 22, marginLeft: 5,color:'white'},
+               headerName: {fontWeight: '600', fontSize: 22, marginLeft: 5,color:orangeColor},
                menuContainer: {marginRight: 15, flexDirection: 'row'},
                modalContainer: {
                  flex: 1,

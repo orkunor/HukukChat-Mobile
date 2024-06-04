@@ -24,7 +24,7 @@ const CustomWebView = ({ uri, onClose }) => {
       />
       {loading && (
         <View style={styles.loadingOverlay}>
-          <Plane size={65} color="#FFF" />
+          <Plane size={65} color={orangeColor} />
         </View>
       )}
       <TouchableOpacity style={styles.closeButton} onPress={onClose}>
@@ -50,7 +50,7 @@ const LicenceModal = () => {
       animationInTiming={500}
       animationOutTiming={500}
       backdropOpacity={1}
-      backdropColor="#D77A25"
+      backdropColor="white"
       onRequestClose={() => {
         dispatch(toggleLicenceModalVisible(false))
      }}
@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
   },
   loadingOverlay: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: orangeColor,
+    backgroundColor: "white",
     justifyContent: 'center',
     alignItems: 'center',
   },

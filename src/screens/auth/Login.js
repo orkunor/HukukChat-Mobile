@@ -48,7 +48,8 @@ const Login = () => {
         body: formData
       }) .then(response => response.json())
       .then(data =>{
-          if(data.message =="An error occurred: Incorrect username or password"){
+        console.log(data)
+          if(data.message === "An error occurred: Yanlış kullanıcı adı ya da parola"){
               dispatch(toggleWrongPassOrMailModalVisible(true))
           }
           else if (data.token_type == "bearer"){

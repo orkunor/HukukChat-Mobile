@@ -16,6 +16,7 @@ const initialState = {
   isWarningFuncVisible:false,
   isChatHistoryModalVisible:false,
   counter: 0,
+  isLoginAgainModalVisible:false,
 };
 export const modalSlice = createSlice({
   name: 'modals',
@@ -67,6 +68,9 @@ export const modalSlice = createSlice({
     setCounter: (state, action) => {
       state.counter = action.payload;
     },
+    toggleLoginAgainModalVisible: (state, action) => {
+      state.isChatHistoryModalVisible = action.payload;
+    },
   },
 });
 
@@ -85,7 +89,8 @@ export const {
   toggleUserNameAlreadyInUseVisible,
   toggleWarningFuncVisible,
 toggleChatHistoryModalVisible,
-setCounter
+setCounter,
+toggleLoginAgainModalVisible
 } = modalSlice.actions;
 
 export const selectIsChatScreenMenuModalVisible = state =>
@@ -117,4 +122,6 @@ export const selectIsServerErrorModalVisible = state =>
   state.modals.isChatHistoryModalVisible;
   export const selectCounter = state =>
   state.modals.counter;
+  export const selectIsLoginAgainModalVisible = state =>
+  state.modals.isLoginAgainModalVisible;
 export default modalSlice.reducer;

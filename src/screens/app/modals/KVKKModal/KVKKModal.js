@@ -39,7 +39,7 @@ const CustomWebView = ({ uri, onClose }) => {
       />
       {loading && (
         <View style={styles.loadingOverlay}>
-          <Plane size={65} color="#FFF" />
+          <Plane size={65} color={orangeColor} />
         </View>
       )}
       <TouchableOpacity style={styles.closeButton} onPress={onClose}>
@@ -68,9 +68,9 @@ const KVKKModal = () => {
       onRequestClose={() => {
         dispatch(toggleKVKKModalVisible(false))
      }}
-      backdropColor="#D77A25"
+      backdropColor="white"
     >
-      <SafeAreaView style={{ flex: 1,backgroundColor:orangeColor }}>
+      <SafeAreaView style={{ flex: 1,backgroundColor:"white" }}>
         <CustomWebView
         
           uri="https://www.hukukchat.com/kvkk"
@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
   },
   loadingOverlay: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: orangeColor,
+    backgroundColor: "white",
     justifyContent: 'center',
     alignItems: 'center',
   },

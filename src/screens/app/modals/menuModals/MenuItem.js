@@ -30,6 +30,7 @@ const MenuItem = ({item}) => {
          break;
         case '6':
           dispatch(toggleChatScreenMenuVisible(false))
+          dispatch(toggleAccountSettingsModalVisible(false))
           const removeData = async () => {
             try {
               await AsyncStorage.removeItem('jwt');

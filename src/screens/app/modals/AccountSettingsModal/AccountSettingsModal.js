@@ -48,8 +48,6 @@ const AccountSettingsModal = () => {
                   headers: {
                     Accept: 'application/json',
                     Authorization: `Bearer ${selectUserToken}`,
-
-                    // Buraya gerekirse diğer header bilgilerini ekleyebilirsiniz
                   }
                 })
                 .then(response => {

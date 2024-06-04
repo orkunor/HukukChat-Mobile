@@ -53,6 +53,7 @@ const Register = () => {
         else if(data.message === "An error occurred: Bu e-posta adresi zaten kullanılıyor"){
           setLoading(false);
          dispatch(toggleMailAlreadyInUse(true))
+         
         }
         
         else if(data.message === "An error occurred: Bu kullanıcı adı zaten alınmış"){
