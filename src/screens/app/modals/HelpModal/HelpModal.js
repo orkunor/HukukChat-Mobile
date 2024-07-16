@@ -138,7 +138,7 @@ useEffect(() => {
                   color={blueColor}
                   size={35}></Ionicons>
               </TouchableOpacity>
-              <Text style={styles.headerName}>Yardım</Text>
+              <Text style={styles.headerName}>Destek</Text>
             </View>
           </View>
         </View>

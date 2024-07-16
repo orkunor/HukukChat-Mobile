@@ -2,7 +2,7 @@ import { StyleSheet, Text, View,TouchableOpacity } from 'react-native'
 import React, { useState,useEffect } from 'react'
 import Modal from 'react-native-modal';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectIsChatScreenMenuModalVisible, toggleChatScreenMenuVisible } from '../../../../slices/modalSlices';
+import { selectIsChatScreenMenuModalVisible, toggleChatScreenMenuVisible, toggleCreditModal, togglePaymentModalVisible } from '../../../../slices/modalSlices';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { FlatList } from 'react-native-gesture-handler';
@@ -14,6 +14,8 @@ import SSSModal from '../SSSModal/SSSModal';
 import KVKKModal from '../KVKKModal/KVKKModal';
 import { orangeColor } from '../../../../statics/color';
 import { BackHandler } from 'react-native';
+import PaymentModal from '../PaymentModal/PaymentModal';
+import CreditModal from '../CreditModal/CreditModal';
 
 const ChatScreenMenuModal = () => {
  const selectModalVisible = useSelector(selectIsChatScreenMenuModalVisible)
@@ -22,32 +24,32 @@ const ChatScreenMenuModal = () => {
   {
     "id": "1",
     "desc":"Hesap Bilgileri",
-    "icon":"cog"
+    "icon":"settings-outline"
   },
   {
     "id": "2",
-    "desc":"Yardım",
-    "icon":"hands-helping"
+    "desc":"Destek",
+    "icon":"chatbox-outline"
   },
   {
     "id": "4",
     "desc":"Sıkça Sorulan Sorular",
-    "icon":"question"
+    "icon":"help-outline"
   },
   {
     "id": "3",
     "desc":"Çerez Politikası",
-    "icon":"certificate"
+    "icon":"document-text-outline"
   },
   {
     "id": "5",
     "desc":"KVKK",
-    "icon":"database"
+    "icon":"server-outline"
   },
   {
     "id": "6",
     "desc":"Çıkış Yap",
-    "icon":"sign-out-alt"
+    "icon":"log-out-outline"
   },
 ])
 
@@ -83,18 +85,26 @@ const ChatScreenMenuModal = () => {
     <AccountSettingsModal/>
     <HelpModal/>
     <LicenceModal/>
+    <PaymentModal/>
     <SSSModal/>
     <KVKKModal/>
+    <CreditModal/>
   <View style={styles.topConatiner}>
     <TouchableOpacity
               style={{marginLeft: 15,}}
               onPress={() => dispatch(toggleChatScreenMenuVisible(false))}>
               <Ionicons name="arrow-back-outline" size={35} color={orangeColor} />
             </TouchableOpacity>
+            <TouchableOpacity
+              style={{marginLeft: 15,padding:10,borderColor:orangeColor,borderRadius:5,borderWidth:.3,flexDirection:'row',alignItems:'center'}}
+              onPress={() => dispatch(toggleCreditModal(true))}>
+                <Ionicons name="diamond-outline" size={16} color={orangeColor}></Ionicons>
+              <Text style={{fontWeight:'600',color:orangeColor,marginLeft:10}}>Kredi Yükle</Text>
+            </TouchableOpacity>
             </View>
             
             <FlatList
-            style={{flex:1}}
+            style={{flex:1}}  
             data={menuData}
             renderItem={MenuFlatlistItem}
             />
@@ -109,7 +119,11 @@ export default ChatScreenMenuModal
 const styles = StyleSheet.create({
   topConatiner:{
     height:50,
-    marginTop:50
+    marginTop:40,
+    flexDirection:'row',
+    alignItems:'center',
+    justifyContent:'space-between'
+
   }
 
 })

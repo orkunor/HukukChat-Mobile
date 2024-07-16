@@ -2,7 +2,7 @@ import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import Modal from 'react-native-modal';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectCounter, selectIsChatHistoryModalVisible, selectIsWarningFuncVisible, toggleChatHistoryModalVisible, toggleServerErrorModalVisible, toggleWarningFuncVisible } from '../../../../slices/modalSlices';
+import { selectCounter, selectIsChatHistoryModalVisible, selectIsWarningFuncVisible, toggleChatHistoryModalVisible, toggleLoginAgainModalVisible, toggleServerErrorModalVisible, toggleWarningFuncVisible } from '../../../../slices/modalSlices';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { FlatList } from 'react-native-gesture-handler';
@@ -11,6 +11,7 @@ import { selectSignIn } from '../../../../slices/authSlices';
 import { setWarningButtonText, setWarningText } from '../../../../slices/chatSlices';
 import { blueColor } from '../../../../statics/color';
 import { Swing } from 'react-native-animated-spinkit';
+import LoginAgainModal from '../Warnings/LoginAgainModal';
 
 const ChatHistoryModal = () => {
   const selectModalVisible = useSelector(selectIsChatHistoryModalVisible);
@@ -29,7 +30,7 @@ const ChatHistoryModal = () => {
 
   const handleGetChatHistory = () => {
     setLoading(true);
-
+    
     fetch('https://api.hukukchat.com/get_chat_history/', {
       method: 'GET',
       headers: {
@@ -39,16 +40,13 @@ const ChatHistoryModal = () => {
     })
       .then(response => response.json())
       .then(data => {
-        setLoading(false);
+      setLoading(false);
         if (data && data.data && Array.isArray(data.data)) {
           const filteredData = data.data.filter(item => item.user_messages && item.user_messages.length > 0);
           setMenuData(filteredData);
         } else {
-          if (data.message === "An error occurred: Doğrulama süresi doldu. Lütfen tekrar giriş yapın.") {
-            dispatch(setWarningButtonText("Giriş Yap"));
-            dispatch(setWarningText("Doğrulama süresi doldu. Lütfen tekrar giriş yapın."));
-            dispatch(toggleWarningFuncVisible(true));
-          }
+          dispatch(toggleLoginAgainModalVisible(true))
+
         }
       })
       .catch(error => {
@@ -56,6 +54,7 @@ const ChatHistoryModal = () => {
         setLoading(false);
         dispatch(toggleServerErrorModalVisible(true));
       });
+      
   };
 
   useEffect(() => {
@@ -77,6 +76,7 @@ const ChatHistoryModal = () => {
       }}
     >
       <SafeAreaView style={{ flex: 1, paddingHorizontal: 15 }}>
+        <LoginAgainModal/>
         <View style={styles.topContainer}>
           <Text style={styles.topText}>Sohbet Geçmişi</Text>
           <TouchableOpacity
@@ -95,8 +95,10 @@ const ChatHistoryModal = () => {
             style={{ flex: 1 }}
             showsVerticalScrollIndicator={false}
             data={menuData}
-            renderItem={MenuFlatlistItem}
-          />
+            renderItem={({ item, index }) => <MenuItem item={item} index={index} />}
+            keyExtractor={(item, index) => index.toString()}
+
+            />
         )}
       </SafeAreaView>
     </Modal>

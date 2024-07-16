@@ -17,6 +17,10 @@ const initialState = {
   isChatHistoryModalVisible:false,
   counter: 0,
   isLoginAgainModalVisible:false,
+  isChatSettingsModalVisible:false,
+  isPaymentModalVisible:false,
+  isCreditModalVisible:false,
+
 };
 export const modalSlice = createSlice({
   name: 'modals',
@@ -69,7 +73,16 @@ export const modalSlice = createSlice({
       state.counter = action.payload;
     },
     toggleLoginAgainModalVisible: (state, action) => {
-      state.isChatHistoryModalVisible = action.payload;
+      state.isLoginAgainModalVisible = action.payload;
+    },
+    toggleChatSeetingsModalVisible: (state, action) => {
+      state.isChatSettingsModalVisible = action.payload;
+    },
+    togglePaymentModalVisible: (state, action) => {
+      state.isPaymentModalVisible = action.payload;
+    },
+    toggleCreditModal: (state, action) => {
+      state.isCreditModalVisible = action.payload;
     },
   },
 });
@@ -90,7 +103,10 @@ export const {
   toggleWarningFuncVisible,
 toggleChatHistoryModalVisible,
 setCounter,
-toggleLoginAgainModalVisible
+toggleLoginAgainModalVisible,
+toggleChatSeetingsModalVisible,
+togglePaymentModalVisible,
+toggleCreditModal
 } = modalSlice.actions;
 
 export const selectIsChatScreenMenuModalVisible = state =>
@@ -124,4 +140,10 @@ export const selectIsServerErrorModalVisible = state =>
   state.modals.counter;
   export const selectIsLoginAgainModalVisible = state =>
   state.modals.isLoginAgainModalVisible;
+  export const selectIsChatSettingsModalVisible = state =>
+  state.modals.isChatSettingsModalVisible;
+  export const selectIsPaymentModalVisible = state =>
+  state.modals.isPaymentModalVisible;
+  export const selectIsCreditModalVisible = state =>
+  state.modals.isCreditModalVisible;
 export default modalSlice.reducer;

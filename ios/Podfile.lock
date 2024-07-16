@@ -1121,6 +1121,10 @@ PODS:
     - React-perflogger (= 0.73.4)
   - RNCAsyncStorage (1.22.2):
     - React-Core
+  - RNCClipboard (1.14.1):
+    - React-Core
+  - RNCMaskedView (0.1.11):
+    - React
   - RNGestureHandler (2.15.0):
     - glog
     - RCT-Folly (= 2022.05.16.00)
@@ -1213,6 +1217,8 @@ DEPENDENCIES:
   - React-utils (from `../node_modules/react-native/ReactCommon/react/utils`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
+  - "RNCClipboard (from `../node_modules/@react-native-clipboard/clipboard`)"
+  - "RNCMaskedView (from `../node_modules/@react-native-community/masked-view`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
@@ -1338,6 +1344,10 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon"
   RNCAsyncStorage:
     :path: "../node_modules/@react-native-async-storage/async-storage"
+  RNCClipboard:
+    :path: "../node_modules/@react-native-clipboard/clipboard"
+  RNCMaskedView:
+    :path: "../node_modules/@react-native-community/masked-view"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
   RNScreens:
@@ -1411,6 +1421,8 @@ SPEC CHECKSUMS:
   React-utils: 6e5ad394416482ae21831050928ae27348f83487
   ReactCommon: 840a955d37b7f3358554d819446bffcf624b2522
   RNCAsyncStorage: 014a78b2cc8cc107c9e92ee428dc0c1ac3223416
+  RNCClipboard: 0a720adef5ec193aa0e3de24c3977222c7e52a37
+  RNCMaskedView: 0e1bc4bfa8365eba5fbbb71e07fbdc0555249489
   RNGestureHandler: deda62b8339496ba721a45e0f3e2d7a319932cee
   RNScreens: b582cb834dc4133307562e930e8fa914b8c04ef2
   RNVectorIcons: 210f910e834e3485af40693ad4615c1ec22fc02b
@@ -1419,4 +1431,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: c3e56a07f77f6992343bd940adb86c1ca100a08b
 
-COCOAPODS: 1.12.1
+COCOAPODS: 1.15.2

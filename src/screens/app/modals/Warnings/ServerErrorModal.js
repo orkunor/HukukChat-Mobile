@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View,TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, View,TouchableOpacity, Image } from 'react-native'
 import React from 'react'
 import Modal from 'react-native-modal'
 import { useDispatch, useSelector } from 'react-redux'
@@ -24,8 +24,10 @@ const ServerErrorModal = () => {
                backdropColor='#D77A25'
              >
                <SafeAreaView style={{flex:1,margin:0,justifyContent:'center',alignItems:'center'}}>
-          
-                <View style={{justifyContent:'center',alignItems:'center',width:'95%',height:225,backgroundColor:'white',borderRadius:12}}>
+                <View style={{justifyContent:'space-around',alignItems:'center',width:'95%',height:500,backgroundColor:'white',borderRadius:12}}>
+
+                <Image source={require("../../../../images/sad-robot.png")} style={{height:200,width:200}}></Image>
+                  <View>
                   <Text style={{color:'black',textAlign:'center',fontSize:22}}>UPPSS! Sunucu hatası, lütfen internet bağlantınızı kontrol edip tekrar deneyiniz!</Text>
                   <TouchableOpacity 
                   onPress={() => {
@@ -33,6 +35,8 @@ const ServerErrorModal = () => {
 
                   }}
                   style={{backgroundColor:blueColor,justifyContent:'center',alignItems:'center',padding:15,borderRadius:8,marginTop:20}}><Text style={{color:'white',textAlign:'center',fontSize:18}}>Tekrar Dene</Text></TouchableOpacity>
+                  </View>
+                 
                 </View>
        
                </SafeAreaView>

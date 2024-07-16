@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
+import {StyleSheet, Text, View, TouchableOpacity,Image} from 'react-native';
 import React from 'react';
 import Modal from 'react-native-modal';
 import {useDispatch, useSelector} from 'react-redux';
@@ -13,6 +13,7 @@ import {
   selectIsWrongPassOrMailModalVisible,
   toggleAccountSettingsModalVisible,
   toggleHelpModalVisible,
+  toggleLoginAgainModalVisible,
   toggleSSSModalVisible,
   toggleWarningFuncVisible,
   toggleWrongPassOrMailModalVisible,
@@ -31,6 +32,7 @@ const LoginAgainModal = ({message, button}) => {
       await AsyncStorage.removeItem('jwt');
       dispatch(setSignIn(null));
       console.log('silindi');
+      dispatch(toggleLoginAgainModalVisible(false))
     } catch (error) {
       console.error('Veri silme hatası:', error);
     }
@@ -54,20 +56,17 @@ const LoginAgainModal = ({message, button}) => {
           justifyContent: 'center',
           alignItems: 'center',
         }}>
+            <View style={{justifyContent:'space-around',alignItems:'center',width:'95%',height:500,backgroundColor:'white',borderRadius:12}}>
+
+<Image source={require("../../../../images/sad-robot.png")} style={{height:200,width:200}}></Image>
         <View
-          style={{
-            justifyContent: 'center',
-            alignItems: 'center',
-            width: '95%',
-            height: 225,
-            backgroundColor: 'white',
-            borderRadius: 12,
-          }}>
+       >
           <Text style={{color: 'black', textAlign: 'center', fontSize: 22}}>
             Doğrulama süresi doldu. Lütfen tekrar giriş yapın.
           </Text>
           <TouchableOpacity
             onPress={() => {
+              
              removeData();
             }}
             style={{
@@ -82,6 +81,7 @@ const LoginAgainModal = ({message, button}) => {
               Giriş Yap
             </Text>
           </TouchableOpacity>
+        </View>
         </View>
       </SafeAreaView>
     </Modal>

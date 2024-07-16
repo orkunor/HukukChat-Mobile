@@ -14,16 +14,20 @@ import {
   View,
   AppState,
   Keyboard,
+  Switch,
 } from 'react-native';
 
 import EventSource, {EventSourceListener} from 'react-native-sse';
 import 'react-native-url-polyfill/auto';
+import { MenuProvider } from 'react-native-popup-menu';
 
 import ChatItem from './ChatItem';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import ChatScreenMenuModal from '../modals/menuModals/ChatScreenMenuModal';
 import {useDispatch, useSelector} from 'react-redux';
+import Showdown from 'react-native-showdown';
+
 import {
   selectCounter,
   selectIsChatHistoryModalVisible,
@@ -31,9 +35,15 @@ import {
   setCounter,
   toggleChatHistoryModalVisible,
   toggleChatScreenMenuVisible,
+  toggleChatSeetingsModalVisible,
+  toggleHelpModalVisible,
   toggleLoginAgainModalVisible,
+  toggleSSSModalVisible,
   toggleServerErrorModalVisible,
   toggleWarningFuncVisible,
+  togglePaymentModalVisible,
+  toggleCreditModal,
+
 } from '../../../slices/modalSlices';
 import {Swing} from 'react-native-animated-spinkit';
 import {blueColor, greyColor, orangeColor} from '../../../statics/color';
@@ -47,10 +57,16 @@ import {
   selectSessionToken,
   selectWarningButtonText,
   selectWarningText,
+  selectWebSearchEnabled,
   setChatHistory,
   setSessionToken,
+  
 } from '../../../slices/chatSlices';
 import LoginAgainModal from '../modals/Warnings/LoginAgainModal';
+import ChatSettingsModal from '../modals/ChatSetttingsModal/ChatSettingsModal';
+import HelpModal from '../modals/HelpModal/HelpModal';
+import SSSModal from '../modals/SSSModal/SSSModal';
+import CreditModal from '../modals/CreditModal/CreditModal';
 
 const Chat = ({navigation}) => {
   const [req, setReq] = useState('');
@@ -67,15 +83,18 @@ const Chat = ({navigation}) => {
   const [editButtonDisable, setEdditButtonDisable] = useState(true);
   const [session_id, set_session_id] = useState('');
   const [userDataOneTime, setUserDataOneTime] = useState(false);
+  const [isWebSearchEnabled, setIsWebSearchEnabled] = useState(false);
+  const [isWebSearchEnabledOneTime, setIsWebSearchEnabledOneTime] = useState(false)
+  const [dataLenghtMoreOne, setDataLenghtMoreOne] = useState(true);
+    useState(false);
   let counter = useSelector(selectCounter);
   let sessionToken = useSelector(selectSessionToken);
 
   const warningText = useSelector(selectWarningText);
   const warningButtonText = useSelector(selectWarningButtonText);
-
   const [data, setData] = useState([
     {
-      title: 'Merhabalar ben Hukuk Chat size nasıl yardımcı olabilirim?null',
+      title: 'Merhabalar ben HukukChat size nasıl yardımcı olabilirim?null',
       owner: 'Ai',
       index: index,
     },
@@ -87,8 +106,12 @@ const Chat = ({navigation}) => {
   useEffect(() => {
     if (data.length > 1) {
       setEdditButtonDisable(false);
+      setIsWebSearchEnabledOneTime(false);
+      setDataLenghtMoreOne(false);
     } else {
       setEdditButtonDisable(true);
+      setDataLenghtMoreOne(true);
+      setIsWebSearchEnabledOneTime(true);
     }
   }, [data]);
   const from_chat_history = dataFromChatHistory => {
@@ -159,24 +182,18 @@ const Chat = ({navigation}) => {
     }
   };
 
-
-
   useEffect(() => {
-    
-    if (dataFromChatHistory && dataFromChatHistory.session_id != undefined){
+    if (dataFromChatHistory && dataFromChatHistory.session_id != undefined) {
       from_chat_history(dataFromChatHistory);
       set_session_id(dataFromChatHistory.session_id);
-      console.log(dataFromChatHistory)
     }
   }, [counter]);
 
-
   useEffect(() => {
-    if(userData){
+    if (userData) {
       handleResetChatHistory();
     }
-    
-  },[])
+  }, []);
 
   const flatListRef = useRef(null); // Ref'i tanımla
 
@@ -198,13 +215,14 @@ const Chat = ({navigation}) => {
       },
     })
       .then(response => {
-        if (response.ok){
+        if (response.ok) {
           return response.json();
         }
         throw new Error('Network response was not ok.');
       })
       .then(data => {
         setUserData(data);
+        console.log(data);
         setUserDataOneTime(true);
       })
       .catch(error => {});
@@ -215,14 +233,14 @@ const Chat = ({navigation}) => {
   }, []);
 
   useEffect(() => {
-      if (userData) {
+    if (userData) {
       const updateSession = async () => {
         const url = 'https://api.hukukchat.com/update_session/';
         const headers = {
           Accept: 'application/json',
           'Content-Type': 'application/json',
         };
-        
+
         const body = JSON.stringify({
           session_id: session_id,
           user_id: userData.user_name,
@@ -235,10 +253,8 @@ const Chat = ({navigation}) => {
             body: body,
           });
 
-          
           const data = await response.json();
-        } catch (error) {
-        }
+        } catch (error) {}
       };
       updateSession();
     }
@@ -278,11 +294,8 @@ const Chat = ({navigation}) => {
   };
 
   useEffect(() => {
-
-
-handleResetChatHistory()
-
-  },[userDataOneTime])
+    handleResetChatHistory();
+  }, [userDataOneTime]);
   const handleResetChatHistory = () => {
     if (userData) {
       fetch('https://api.hukukchat.com/reset_session/', {
@@ -297,13 +310,14 @@ handleResetChatHistory()
       })
         .then(response => response.json())
         .then(data => {
+          console.log(data);
           if (data.status === 'success') {
             dispatch(setSessionToken(''));
             set_session_id('');
             setData([
               {
                 title:
-                  'Merhabalar ben Hukuk Chat size nasıl yardımcı olabilirim?null',
+                  'Merhabalar ben HukukChat size nasıl yardımcı olabilirim?null',
                 owner: 'Ai',
                 index: index,
               },
@@ -318,16 +332,15 @@ handleResetChatHistory()
           setData([
             {
               title:
-                'Merhabalar ben Hukuk Chat size nasıl yardımcı olabilirim?null',
+                'Merhabalar ben HukukChat size nasıl yardımcı olabilirim?null',
               owner: 'Ai',
-              index: index,
+              index: index, 
             },
           ]);
         });
     }
   };
 
-  
   useEffect(() => {
     if (req.trim().length === 0) {
       setSendButtonDisabled(true);
@@ -336,12 +349,58 @@ handleResetChatHistory()
     }
   }, [req]);
 
+  const sendWithWebSearch = () => {
+    setSendButtonDisabled(true);
+    fetchSubscriptionPlans();
+    const myrequest = {title: req, owner: 'me'};
+    setReq('');
+    setData(prevData => [...prevData, myrequest]);
+
+    const loading = {
+      title: 'loading',
+      owner: 'Ai',
+      index: index + 1,
+    };
+    setData(prevData => [...prevData, loading]);
+    Keyboard.dismiss();
+    flatListRef.current.scrollToEnd({animated: true});
+
+    fetch('https://api.hukukchat.com/web_arama', {
+      headers: {
+        Authorization: `Bearer ${selectUserToken}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        message: req,
+      }),
+      method: 'POST',
+    })
+      .then(response => response.json())
+      .then(data => {
+        accumulatedData += data.summary;
+        const newChatItem = {
+          title: accumulatedData,
+          owner: 'Ai',
+          index: index + 1,
+        };
+
+        accumulatedData = '';
+        setMessageWaiting(false);
+        setSendButtonDisabled(false);
+
+        updateDataAtLastIndex(newChatItem);
+      })
+      .catch(error => {
+        setMessageWaiting(false);
+        dispatch(toggleServerErrorModalVisible(true));
+        setSendButtonDisabled(false);
+      });
+  };
   const send = () => {
     setSendButtonDisabled(true);
     fetchSubscriptionPlans();
     const myrequest = {title: req, owner: 'me'};
     setReq('');
-    console.log("session_id :"  ,session_id)
     setData(prevData => [...prevData, myrequest]);
 
     const loading = {
@@ -380,7 +439,6 @@ handleResetChatHistory()
           owner: 'Ai',
           index: index + 1,
         };
-
         if (chunk.text === null) {
           accumulatedData = '';
           setMessageWaiting(false);
@@ -400,10 +458,10 @@ handleResetChatHistory()
     eventSource.addEventListener('error', event => {
       let errorMessage = JSON.parse(event.message);
       if (
-        errorMessage.message ==
+        errorMessage.message ===
         'An error occurred: Doğrulama süresi doldu. Lütfen tekrar giriş yapın.'
       ) {
-       
+        console.log(errorMessage.message);
         setMessageWaiting(false);
         dispatch(toggleLoginAgainModalVisible(true));
         setSendButtonDisabled(false);
@@ -419,7 +477,6 @@ handleResetChatHistory()
         return eventSource.close();
       }
     });
-    
 
     return () => {
       eventSource.close();
@@ -427,7 +484,17 @@ handleResetChatHistory()
   };
 
   const renderItem = ({item, index}) => {
-    return <ChatItem item={item} index={index}></ChatItem>;
+
+    return (
+      <MenuProvider>
+        <ChatItem item={item} index={index}></ChatItem>
+</MenuProvider>
+    )
+  };
+
+  const handleToggleSwitch = () => {
+    const newValue = !isWebSearchEnabled;
+    setIsWebSearchEnabled(newValue);
   };
 
   return (
@@ -437,52 +504,127 @@ handleResetChatHistory()
         behavior={Platform.OS === 'ios' ? 'padding' : null}
         enabled>
         <ChatHistoryModal />
+        <ChatSettingsModal />
+        <HelpModal />
         <ChatScreenMenuModal />
         <ServerErrorModal />
-        <LoginAgainModal/>
-        <StatusBar backgroundColor={'white'} barStyle={'dark-content'} />
-        <WarningFunc message={message} button={buttonText} />
-        <View style={styles.bigContainer}>
-          <View style={styles.headTextContainer}>
-            <View style={styles.headLeftContainer}>
-              <TouchableOpacity
-                onPress={() => {
-                  dispatch(toggleChatHistoryModalVisible(true));
-                  dispatch(setCounter(counter + 1));
-                  dispatch(setChatHistory(data));
-                }}>
-                <Ionicons
-                  name="albums-outline"
-                  size={27}
-                  color={orangeColor}></Ionicons>
-              </TouchableOpacity>
-              <Text style={styles.headText}>HukukChat</Text>
-            </View>
+        <LoginAgainModal />
+        <SSSModal />
+        <CreditModal/>
 
-            <View style={{flexDirection: 'row'}}>
-              <TouchableOpacity
-                disabled={editButtonDisable}
-                style={{marginRight: 5}}
-                onPress={handleResetChatHistory}>
-                <FontAwesome5
-                  name="edit"
-                  size={22}
-                  color={
-                    editButtonDisable == true ? '#DCDCDC' : '#193353'
-                  }></FontAwesome5>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={{marginRight: 5}}
-                onPress={() => {
-                  dispatch(toggleChatScreenMenuVisible(true));
-                }}>
-                <Ionicons
-                  name="chevron-forward-outline"
-                  size={25}
-                  color={'#193353'}></Ionicons>
-              </TouchableOpacity>
-            </View>
-          </View>
+        <StatusBar
+          backgroundColor={'white'}
+
+          barStyle={'dark-content'}
+        />
+
+        <WarningFunc message={message} button={buttonText} />
+        
+        <View style={{flex:1,backgroundColor:'white'}}>
+          
+          {
+            dataLenghtMoreOne
+            ?
+  (
+
+
+<View style={styles.headTextContainer}>
+<View style={styles.headLeftContainer}>
+  <TouchableOpacity
+    onPress={() => {
+      dispatch(toggleChatHistoryModalVisible(true));
+      dispatch(setCounter(counter + 1));
+      dispatch(setChatHistory(data));
+    }}>
+    <Ionicons
+      name="albums-outline"
+      size={27}
+      color={orangeColor}></Ionicons>
+  </TouchableOpacity>
+
+</View>
+<TouchableOpacity
+  style={{marginLeft: 15,paddingHorizontal:15,paddingVertical:7,backgroundColor:"#D3D3D3",borderRadius:5,flexDirection:'row',alignItems:'center'}}
+  onPress={() => dispatch(toggleCreditModal(true))}>
+      <Ionicons name="diamond-outline" size={16} color={blueColor}></Ionicons>
+  <Text style={{fontWeight:'500',color:blueColor,marginLeft:12}}>Kredi Yükle</Text>
+
+</TouchableOpacity>
+      
+<View style={{flexDirection: 'row'}}>
+  <TouchableOpacity
+    disabled={editButtonDisable}
+    style={{marginRight: 5}}
+    onPress={handleResetChatHistory}>
+    <FontAwesome5
+      name="edit"
+      size={22}
+      color={
+        editButtonDisable == true ? '#DCDCDC' : '#193353'
+      }></FontAwesome5>
+  </TouchableOpacity>
+
+  <TouchableOpacity
+    style={{marginRight: 5}}
+    onPress={() => {
+      dispatch(toggleChatScreenMenuVisible(true));
+    }}>
+    <Ionicons
+      name="chevron-forward-outline"
+      size={25}
+      color={'#193353'}></Ionicons>
+  </TouchableOpacity>
+</View>
+</View>
+  )
+  :
+  (
+    <View style={styles.headTextContainer}>
+    <View style={styles.headLeftContainer}>
+      <TouchableOpacity
+        onPress={() => {
+          dispatch(toggleChatHistoryModalVisible(true));
+          dispatch(setCounter(counter + 1));
+          dispatch(setChatHistory(data));
+        }}>
+        <Ionicons
+          name="albums-outline"
+          size={27}
+          color={orangeColor}></Ionicons>
+      </TouchableOpacity>
+      <Text style={styles.headText}>
+        {isWebSearchEnabled ? 'Webde Arama' : 'HukukChat'}
+      </Text>
+    </View>
+          
+    <View style={{flexDirection: 'row'}}>
+      <TouchableOpacity
+        disabled={editButtonDisable}
+        style={{marginRight: 5}}
+        onPress={handleResetChatHistory}>
+        <FontAwesome5
+          name="edit"
+          size={22}
+          color={
+            editButtonDisable == true ? '#DCDCDC' : '#193353'
+          }></FontAwesome5>
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        style={{marginRight: 5}}
+        onPress={() => {
+          dispatch(toggleChatScreenMenuVisible(true));
+        }}>
+        <Ionicons
+          name="chevron-forward-outline"
+          size={25}
+          color={'#193353'}></Ionicons>
+      </TouchableOpacity>
+    </View>
+  </View>
+  )
+  
+          }
           <View style={styles.contentContainer}>
             <FlatList
               ref={flatListRef}
@@ -491,6 +633,44 @@ handleResetChatHistory()
               style={styles.flatListContainer}
               extraData={data}
             />
+
+            {isWebSearchEnabledOneTime ? (
+              <View style={{height: 40, width: '100%'}}>
+                <View
+                  style={{
+                    borderRadius: 7,
+                    borderWidth: 0.3,
+                    borderColor: 'grey',
+                    padding: 4,
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    height: 40,
+                    width: 200,
+                    marginLeft: 10,
+                    justifyContent: 'space-between',
+                  }}>
+                  <Switch
+                    trackColor={{false: '#767577', true: orangeColor}}
+                    thumbColor={'#f4f3f4'}
+                    style={{marginLeft: 2}}
+                    onValueChange={handleToggleSwitch}
+                    value={isWebSearchEnabled}
+                  />
+                  <Text style={{fontSize: 16}}>Webde Arama</Text>
+                  <TouchableOpacity
+                    style={{marginRight: 5}}
+                    onPress={() => {
+                      dispatch(toggleSSSModalVisible(true));
+                    }}>
+                    <Ionicons
+                      name="information-circle-outline"
+                      size={25}
+                      color={'grey'}></Ionicons>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            ) : null}
+
             <View style={styles.inputContainer}>
               <TextInput
                 style={styles.textInput}
@@ -498,30 +678,45 @@ handleResetChatHistory()
                 onChangeText={text => setReq(text)}
                 placeholder="Bir şeyler sorun..."
                 ref={inputRef}
-                placeholderTextColor={'#D77A25'}
+                placeholderTextColor={'#808080'}
               />
-              {messageWaiting ? (
-                <View
-                  style={{
-                    height: 25,
-                    width: 25,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}>
-                  <Swing size={25} color={blueColor} />
-                </View>
-              ) : (
-                <TouchableOpacity
-                  disabled={sendButtonDisabled}
-                  style={styles.sendButton}
-                  onPress={send}>
-                  <FontAwesome5
-                    name="paper-plane"
-                    size={22}
-                    color={sendButtonDisabled == true ? '#DCDCDC' : '#193353'}
-                  />
-                </TouchableOpacity>
-              )}
+
+              <TouchableOpacity
+                disabled={sendButtonDisabled}
+                style={styles.sendButton}
+                onPress={isWebSearchEnabled ? sendWithWebSearch : send}>
+                <FontAwesome5
+                  name="paper-plane"
+                  size={22}
+                  color={sendButtonDisabled == true ? '#DCDCDC' : '#193353'}
+                />
+              </TouchableOpacity>
+            </View>
+            <View
+              style={{
+                marginHorizontal: 10,
+                paddingHorizontal: 15,
+                paddingVertical: 2,
+                flexDirection: 'row',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                marginTop: 0,
+              }}>
+              <Text style={{color: 'grey', fontSize: 12, marginLeft: 5}}>
+                Model: GPT 4.0 | Hukuk Alanı: Genel Hukuk. Oluşturulan içerik
+                hatalı veya eksikse lütfen bize bildirin.
+              </Text>
+              <TouchableOpacity
+                style={{marginLeft: 5, marginBottom: 5}}
+                onPress={() => {
+                  dispatch(toggleHelpModalVisible(true));
+                }}>
+                <Ionicons
+                  name="share-outline"
+                  size={25}
+                  color={'grey'}></Ionicons>
+              </TouchableOpacity>
             </View>
           </View>
         </View>
@@ -535,13 +730,12 @@ export default Chat;
 const styles = StyleSheet.create({
   bigContainer: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: '#f3f6f4',
   },
   headTextContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    borderBottomWidth: 2,
-    borderColor: 'white',
+
     height: 50,
     alignItems: 'center',
   },
@@ -564,9 +758,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 10,
-    borderTopWidth: 2,
-    borderColor: 'white',
-
+    marginBottom: 0,
     height: 75,
   },
   textInput: {
@@ -577,8 +769,8 @@ const styles = StyleSheet.create({
     color: 'black',
     paddingHorizontal: 10,
     marginRight: 10,
-    borderColor: '#D77A25',
-    backgroundColor: 'white',
+    borderColor: '#D3D3D3',
+    backgroundColor: '#D3D3D3',
   },
   sendButton: {
     height: 25,
@@ -591,3 +783,7 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
 });
+const css = `
+h1 { color: red; }
+code { font-size: 1.2rem; background-color: lightgray; }
+`;

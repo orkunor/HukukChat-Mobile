@@ -81,8 +81,8 @@ android {
         applicationId "com.hukukchat"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 10 // increment this number
-        versionName "2" // update this to reflect the new version
+        versionCode 23// increment this number
+        versionName "3.3" // update this to reflect the new version
     }
     signingConfigs {
         release {

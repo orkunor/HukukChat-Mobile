@@ -1,6 +1,6 @@
 import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 import React from 'react';
-import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useDispatch} from 'react-redux';
 
@@ -72,7 +72,7 @@ const MenuItem = ({item}) => {
         flexDirection: 'row',
         borderColor:orangeColor
       }}>
-      <FontAwesome5Icon name={`${item.icon}`} size={22} color={orangeColor}></FontAwesome5Icon>
+      <Ionicons name={`${item.icon}`} size={27} color={orangeColor}></Ionicons>
       <Text
         style={{
           fontSize: 22,
